@@ -28,6 +28,12 @@ class TravelChart @JvmOverloads constructor(
     // --------------------------------- 输入 ---------------------------
     /** 柱宽 */
     var barWidth = 0
+        set(value) {
+            if (field == value) return
+
+            field = value
+            barWidthHalf = value / 2
+        }
     /** 柱间距 */
     var barInterval = 0
     /** 柱子的背景图 */
@@ -43,8 +49,14 @@ class TravelChart @JvmOverloads constructor(
 
     // --------------------------------- 运算 ---------------------------------
 
+    var barWidthHalf = 0
+
     /** 绘制x轴的内容的高度 */
     var xAxisContentHeight = 0
+    /** 当前居中的x轴值 */
+    var currentXAxis = 0
+    /** 当前居中偏移值 (-0.5,0.5] */
+    var currentXAxisOffsetPercent = 0f
 
     init {
 
@@ -93,9 +105,23 @@ class TravelChart @JvmOverloads constructor(
         val barsSaveCount = canvas.save()
         canvas.translate(barsPaddingLeft, barsPaddingTop)
 
-        canvas.drawCircle(100F, 100F, 100F, paint)
+        drawBars(canvas, barsWidth, barsHeight)
 
         canvas.restoreToCount(barsSaveCount)
+    }
+
+    /**
+     * 绘制柱状态图区域
+     */
+    private fun drawBars(canvas: Canvas, barsWidth: Int, barsHeight: Int) {
+        val horizontalMidpoint = barsWidth / 2
+
+        barDrawable?.apply {
+            setBounds(horizontalMidpoint - barWidthHalf, 0, horizontalMidpoint + barWidthHalf, barsHeight)
+            draw(canvas)
+        }
+
+        canvas.drawCircle(100F, 100F, 100F, paint)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -103,11 +129,18 @@ class TravelChart @JvmOverloads constructor(
     }
 
     /**
-     * TravelChart要绘制的数据
+     * TravelChart的图表的数据结构
      */
-    class DefaultData<T : IItem> {
-        val list = ArrayList<T>()
-        // 添加数据时，判断数据是否在屏幕外，再决定是否 invalidate()
+    interface IData {
+        /**
+         * 获取y轴最大坐标值
+         */
+        fun getYAxisMin(): Float
+
+        /**
+         * 获取y轴最大坐标值
+         */
+        fun getYAxisMax(): Float
     }
 
     /**
@@ -118,6 +151,14 @@ class TravelChart @JvmOverloads constructor(
          * 获取y轴坐标值
          */
         fun getYAxis(): Float
+    }
+
+    /**
+     * TravelChart要绘制的数据
+     */
+    class DefaultData<T : IItem> {
+        val list = ArrayList<T>()
+        // 添加数据时，判断数据是否在屏幕外，再决定是否 invalidate()
     }
 
     private data class DefaultItem(val y: Float) : IItem {
