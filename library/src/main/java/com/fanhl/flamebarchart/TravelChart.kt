@@ -66,11 +66,16 @@ class TravelChart @JvmOverloads constructor(
         val saveCount = canvas.save()
         canvas.translate(paddingLeft.toFloat(), paddingRight.toFloat())
 
-        val horizontalMidpoint = validWidth / 2f
-
-        canvas.drawCircle(100F, 100F, 100F, paint)
+        draw(canvas, validWidth, validHeight)
 
         canvas.restoreToCount(saveCount)
+    }
+
+    /**
+     * 绘制区域
+     */
+    private fun draw(canvas: Canvas, validWidth: Int, validHeight: Int) {
+        canvas.drawCircle(100F, 100F, 100F, paint)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
