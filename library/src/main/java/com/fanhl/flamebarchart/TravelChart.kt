@@ -116,9 +116,37 @@ class TravelChart @JvmOverloads constructor(
     private fun drawBars(canvas: Canvas, barsWidth: Int, barsHeight: Int) {
         val horizontalMidpoint = barsWidth / 2
 
-        barDrawable?.apply {
-            setBounds(horizontalMidpoint - barWidthHalf, 0, horizontalMidpoint + barWidthHalf, barsHeight)
-            draw(canvas)
+        data?.apply {
+            if (list.isEmpty()) {
+                return
+            }
+
+            //仅绘制在屏幕内的bar
+            val indexStart = maxOf(
+                    (currentXAxis - (horizontalMidpoint + currentXAxisOffsetPercent * (barWidth + barInterval) + barWidth / 2) / (barWidth + barInterval)).toInt() - 1,
+                    0
+            )
+
+            val indexEnd = minOf(
+                    ((barsWidth - (horizontalMidpoint + currentXAxisOffsetPercent * (barWidth + barInterval) + barWidth / 2)) / (barWidth + barInterval) + currentXAxis).toInt() + 1,
+                    list.size - 1
+            )
+
+            (indexStart..indexEnd).forEach { index ->
+                val item = list[index]
+
+                barDrawable?.apply {
+                    val barCenterX = horizontalMidpoint + ((index - currentXAxis - currentXAxisOffsetPercent) * (barWidth + barInterval)).toInt()
+                    setBounds(
+                            barCenterX - barWidthHalf,
+                            (barsHeight * (1 - item.getYAxis())).toInt(),
+                            barCenterX + barWidthHalf,
+                            barsHeight
+                    )
+                    draw(canvas)
+                }
+
+            }
         }
 
         canvas.drawCircle(100F, 100F, 100F, paint)
