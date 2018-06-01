@@ -160,12 +160,7 @@ class TravelChart @JvmOverloads constructor(
                             barCenterX + barWidthHalf,
                             barsHeight
                     )
-
-                    val currentStateDrawable = (this as? StateListDrawable)?.let {
-                        getDrawable(it, IntArray(android.R.attr.state_selected))
-                    } ?: this
-
-                    currentStateDrawable.draw(canvas)
+                    this.draw(canvas)
                 }
 
             }
@@ -174,6 +169,7 @@ class TravelChart @JvmOverloads constructor(
         canvas.drawCircle(100F, 100F, 100F, paint)
     }
 
+    @Deprecated("新版本用不了了")
     private fun getDrawable(stateListDrawable: StateListDrawable, state: IntArray): Drawable {
         val getStateDrawableIndex = StateListDrawable::class.java.getMethod("getStateDrawableIndex", IntArray::class.java)
         val getStateDrawable = StateListDrawable::class.java.getMethod("getStateDrawable", Int::class.javaPrimitiveType)
