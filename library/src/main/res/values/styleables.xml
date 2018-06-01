@@ -3,7 +3,9 @@
     <declare-styleable name="TravelChart">
         <attr name="barWidth" format="dimension"/>
         <attr name="barInterval" format="dimension"/>
-        <attr name="barDrawable" format="reference"/>
+        <attr name="barDrawableDefault" format="reference"/>
+        <attr name="barDrawablePressed" format="reference"/>
+        <attr name="barDrawableFocused" format="reference"/>
 
         <attr name="barHintPadding" format="dimension"/>
 

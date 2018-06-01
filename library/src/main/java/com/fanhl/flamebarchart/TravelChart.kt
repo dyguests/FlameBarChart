@@ -40,7 +40,9 @@ class TravelChart @JvmOverloads constructor(
     /** 柱间距 */
     var barInterval = 0
     /** 柱子的背景图 */
-    var barDrawable: Drawable? = null
+    var barDrawableDefault: Drawable? = null
+    var barDrawablePressed: Drawable? = null
+    var barDrawableFocused: Drawable? = null
 
     /** bar顶部的提示内容的上下padding */
     var barHintPadding = 0
@@ -75,7 +77,9 @@ class TravelChart @JvmOverloads constructor(
 
         barWidth = a.getDimensionPixelOffset(R.styleable.TravelChart_barWidth, resources.getDimensionPixelOffset(R.dimen.bar_width))
         barInterval = a.getDimensionPixelOffset(R.styleable.TravelChart_barInterval, resources.getDimensionPixelOffset(R.dimen.bar_interval))
-        barDrawable = a.getDrawable(R.styleable.TravelChart_barDrawable) ?: ContextCompat.getDrawable(context, R.drawable.selector_bar_drawable)
+        barDrawableDefault = a.getDrawable(R.styleable.TravelChart_barDrawableDefault) ?: ContextCompat.getDrawable(context, R.drawable.bar_drawable_default)
+        barDrawablePressed = a.getDrawable(R.styleable.TravelChart_barDrawablePressed) ?: ContextCompat.getDrawable(context, R.drawable.bar_drawable_pressed)
+        barDrawableFocused = a.getDrawable(R.styleable.TravelChart_barDrawableFocused) ?: ContextCompat.getDrawable(context, R.drawable.bar_drawable_focused)
 
         barHintPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_barHintPadding, resources.getDimensionPixelOffset(R.dimen.bar_hint_padding))
 
@@ -151,8 +155,13 @@ class TravelChart @JvmOverloads constructor(
 
             (indexStart..indexEnd).forEach { index ->
                 val item = list[index]
-
-                barDrawable?.apply {
+                if (index == currentXAxis) {
+                    barDrawableFocused
+                } else if (false) {
+                    barDrawablePressed
+                } else {
+                    barDrawableDefault
+                }?.apply {
                     val barCenterX = horizontalMidpoint + ((index - currentXAxis - currentXAxisOffsetPercent) * (barWidth + barInterval)).toInt()
                     setBounds(
                             barCenterX - barWidthHalf,

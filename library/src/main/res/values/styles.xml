@@ -4,7 +4,9 @@
     <style name="Widget_Travel_Chart">
         <item name="barWidth">@dimen/bar_width</item>
         <item name="barInterval">@dimen/bar_interval</item>
-        <item name="barDrawable">@drawable/selector_bar_drawable</item>
+        <item name="barDrawableDefault">@drawable/bar_drawable_default</item>
+        <item name="barDrawablePressed">@drawable/bar_drawable_pressed</item>
+        <item name="barDrawableFocused">@drawable/bar_drawable_focused</item>
 
         <item name="barHintPadding">@dimen/bar_hint_padding</item>
 
