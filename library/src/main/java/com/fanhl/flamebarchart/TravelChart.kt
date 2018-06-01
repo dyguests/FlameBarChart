@@ -41,6 +41,11 @@ class TravelChart @JvmOverloads constructor(
             invalidate()
         }
 
+    // --------------------------------- 运算 ---------------------------------
+
+    /** 绘制x轴的内容的高度 */
+    var xAxisContentHeight = 0
+
     init {
 
         val resources = context.resources
@@ -49,6 +54,8 @@ class TravelChart @JvmOverloads constructor(
         barWidth = a.getDimensionPixelOffset(R.styleable.TravelChart_barWidth, resources.getDimensionPixelOffset(R.dimen.bar_width))
         barInterval = a.getDimensionPixelOffset(R.styleable.TravelChart_barInterval, resources.getDimensionPixelOffset(R.dimen.bar_interval))
         barDrawable = a.getDrawable(R.styleable.TravelChart_barDrawable) ?: ContextCompat.getDrawable(context, R.drawable.selector_bar_drawable)
+
+        xAxisPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_xAxisPadding, resources.getDimensionPixelOffset(R.dimen.x_axis_padding))
 
         a.recycle()
 
@@ -68,7 +75,7 @@ class TravelChart @JvmOverloads constructor(
         val saveCount = canvas.save()
         canvas.translate(paddingLeft.toFloat(), paddingRight.toFloat())
 
-        draw(canvas, validWidth, validHeight)
+        drawValid(canvas, validWidth, validHeight)
 
         canvas.restoreToCount(saveCount)
     }
@@ -76,8 +83,19 @@ class TravelChart @JvmOverloads constructor(
     /**
      * 绘制区域
      */
-    private fun draw(canvas: Canvas, validWidth: Int, validHeight: Int) {
+    private fun drawValid(canvas: Canvas, validWidth: Int, validHeight: Int) {
+        val barsWidth = validWidth
+        val barsHeight = validHeight - xAxisPadding - xAxisContentHeight - xAxisPadding
+
+        val barsPaddingLeft = 0f
+        val barsPaddingTop = 0f
+
+        val barsSaveCount = canvas.save()
+        canvas.translate(barsPaddingLeft, barsPaddingTop)
+
         canvas.drawCircle(100F, 100F, 100F, paint)
+
+        canvas.restoreToCount(barsSaveCount)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
