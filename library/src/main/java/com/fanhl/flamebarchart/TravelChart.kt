@@ -27,7 +27,6 @@ class TravelChart @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
     private val paint by lazy { Paint() }
-    private val path by lazy { Path() }
     private val scroller by lazy { OverScroller(context) }
 
     private var mIsBeingDragged = false

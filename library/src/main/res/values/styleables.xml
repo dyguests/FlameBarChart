@@ -10,5 +10,6 @@
         <attr name="barHintPadding" format="dimension"/>
 
         <attr name="xAxisPadding" format="dimension"/>
+        <attr name="xAxisCurrentBackground" format="reference"/>
     </declare-styleable>
 </resources>
