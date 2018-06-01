@@ -53,17 +53,17 @@ class TravelChart @JvmOverloads constructor(
 
     // --------------------------------- 运算 ---------------------------------
 
-    var barWidthHalf = 0
+    private var barWidthHalf = 0
 
     /** bar顶部的提示内容的高度 */
-    var barHintHeight = 0
+    private var barHintHeight = 0
     /** 绘制x轴的内容的高度 */
-    var xAxisContentHeight = 0
+    private var xAxisContentHeight = 0
 
     /** 当前居中的x轴值 */
-    var currentXAxis = 0
+    private var currentXAxis = 0
     /** 当前居中偏移值 (-0.5,0.5] */
-    var currentXAxisOffsetPercent = 0f
+    private var currentXAxisOffsetPercent = 0f
 
     init {
 
