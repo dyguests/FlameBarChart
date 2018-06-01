@@ -8,6 +8,7 @@ import android.graphics.Path
 import android.util.AttributeSet
 import android.view.View
 import android.widget.OverScroller
+import java.util.*
 
 /**
  * 数据图表
@@ -23,6 +24,50 @@ class TravelChart @JvmOverloads constructor(
     private val path by lazy { Path() }
     private val scroller by lazy { OverScroller(context) }
 
+    // --------------------------------- 输入 ---------------------------
+
+    var data: Data<*>? = null
+        set(value) {
+            field = value
+            invalidate()
+        }
+
+    init {
+        if (isInEditMode) {
+            val random = Random()
+            data = Data<DefaultItem>().apply {
+                list.apply {
+                    fun add(y: Float) {
+                        add(DefaultItem(y))
+                    }
+                    add(random.nextFloat())
+                    add(random.nextFloat())
+                    add(random.nextFloat())
+                    add(random.nextFloat())
+                    add(random.nextFloat())
+
+                    add(random.nextFloat())
+                    add(random.nextFloat())
+                    add(random.nextFloat())
+                    add(random.nextFloat())
+                    add(random.nextFloat())
+
+                    add(random.nextFloat())
+                    add(random.nextFloat())
+                    add(random.nextFloat())
+                    add(random.nextFloat())
+                    add(random.nextFloat())
+
+                    add(random.nextFloat())
+                    add(random.nextFloat())
+                    add(random.nextFloat())
+                    add(random.nextFloat())
+                    add(random.nextFloat())
+                }
+            }
+        }
+    }
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val validWidth = width - paddingLeft - paddingRight
@@ -33,6 +78,10 @@ class TravelChart @JvmOverloads constructor(
         canvas.drawCircle(100F, 100F, 100F, paint)
 
         canvas.restoreToCount(saveCount)
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
     }
 
     /**
@@ -47,7 +96,15 @@ class TravelChart @JvmOverloads constructor(
      * TravelChart的图表上关键点的数据结构
      */
     interface IItem {
-        fun getXAxis(): Float
+        /**
+         * 获取y轴坐标值
+         */
         fun getYAxis(): Float
+    }
+
+    private data class DefaultItem(val y: Float) : IItem {
+        override fun getYAxis(): Float {
+            return y
+        }
     }
 }
