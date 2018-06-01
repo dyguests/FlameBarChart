@@ -156,14 +156,13 @@ class TravelChart @JvmOverloads constructor(
             (indexStart..indexEnd).forEach { index ->
                 val item = list[index]
 
-                val drawable = if (index == currentXAxis) {
+                (if (index == currentXAxis) {
                     barDrawableFocused
                 } else if (false) {
                     barDrawablePressed
                 } else {
                     barDrawableDefault
-                }
-                drawable?.apply {
+                })?.apply {
                     val barCenterX = horizontalMidpoint + ((index - currentXAxis - currentXAxisOffsetPercent) * (barWidth + barInterval)).toInt()
                     setBounds(
                             barCenterX - barWidthHalf,
@@ -178,14 +177,6 @@ class TravelChart @JvmOverloads constructor(
         }
 
         canvas.drawCircle(100F, 100F, 100F, paint)
-    }
-
-    @Deprecated("新版本用不了了")
-    private fun getDrawable(stateListDrawable: StateListDrawable, state: IntArray): Drawable {
-        val getStateDrawableIndex = StateListDrawable::class.java.getMethod("getStateDrawableIndex", IntArray::class.java)
-        val getStateDrawable = StateListDrawable::class.java.getMethod("getStateDrawable", Int::class.javaPrimitiveType)
-        val index = getStateDrawableIndex.invoke(stateListDrawable, state) as Int
-        return getStateDrawable.invoke(stateListDrawable, index) as Drawable
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
