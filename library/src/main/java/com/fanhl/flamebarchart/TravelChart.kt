@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.StateListDrawable
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
@@ -89,6 +90,7 @@ class TravelChart @JvmOverloads constructor(
         }
     }
 
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val validWidth = width - paddingLeft - paddingRight
@@ -157,6 +159,11 @@ class TravelChart @JvmOverloads constructor(
                             barCenterX + barWidthHalf,
                             barsHeight
                     )
+
+                    (this as? StateListDrawable)?.apply {
+                        state = IntArray(android.R.attr.state_pressed)
+                    }
+
                     draw(canvas)
                 }
 
