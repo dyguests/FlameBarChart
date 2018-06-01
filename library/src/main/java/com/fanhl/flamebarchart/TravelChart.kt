@@ -32,6 +32,8 @@ class TravelChart @JvmOverloads constructor(
     var barInterval = 0
     /** 柱子的背景图 */
     var barDrawable: Drawable? = null
+    /** x轴的上下间距 */
+    var xAxisPadding = 0
 
     var data: DefaultData<*>? = null
         set(value) {

@@ -4,5 +4,7 @@
         <attr name="barWidth" format="dimension"/>
         <attr name="barInterval" format="dimension"/>
         <attr name="barDrawable" format="reference"/>
+
+        <attr name="xAxisPadding" format="dimension"/>
     </declare-styleable>
 </resources>
