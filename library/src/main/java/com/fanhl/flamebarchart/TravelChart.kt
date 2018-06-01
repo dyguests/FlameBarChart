@@ -4,6 +4,8 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.drawable.Drawable
+import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
 import android.widget.OverScroller
@@ -24,11 +26,12 @@ class TravelChart @JvmOverloads constructor(
     private val scroller by lazy { OverScroller(context) }
 
     // --------------------------------- 输入 ---------------------------
-
     /** 柱宽 */
     var barWidth = 0
     /** 柱间距 */
     var barInterval = 0
+    /** 柱子的背景图 */
+    var barDrawable: Drawable? = null
 
     var data: DefaultData<*>? = null
         set(value) {
@@ -38,9 +41,12 @@ class TravelChart @JvmOverloads constructor(
 
     init {
 
+        val resources = context.resources
         val a = context.obtainStyledAttributes(attrs, R.styleable.TravelChart, defStyleAttr, R.style.Widget_Travel_Chart)
 
-
+        barWidth = a.getDimensionPixelOffset(R.styleable.TravelChart_barWidth, resources.getDimensionPixelOffset(R.dimen.bar_width))
+        barInterval = a.getDimensionPixelOffset(R.styleable.TravelChart_barInterval, resources.getDimensionPixelOffset(R.dimen.bar_interval))
+        barDrawable = a.getDrawable(R.styleable.TravelChart_barDrawable) ?: ContextCompat.getDrawable(context, R.drawable.selector_bar_drawable)
 
         a.recycle()
 
