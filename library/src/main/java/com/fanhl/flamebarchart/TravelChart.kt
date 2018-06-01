@@ -37,6 +37,13 @@ class TravelChart @JvmOverloads constructor(
         }
 
     init {
+
+        val a = context.obtainStyledAttributes(attrs, R.styleable.TravelChart, defStyleAttr, R.style.Widget_Travel_Chart)
+
+
+
+        a.recycle()
+
         if (isInEditMode) {
             val random = Random()
             data = DefaultData<DefaultItem>().apply {
