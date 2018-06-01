@@ -25,6 +25,29 @@ class TravelChart @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawColor(Color.RED)
+        val validWidth = width - paddingLeft - paddingRight
+
+        val saveCount = canvas.save()
+        canvas.translate(paddingLeft.toFloat(), paddingRight.toFloat())
+
+        canvas.drawCircle(100F, 100F, 100F, paint)
+
+        canvas.restoreToCount(saveCount)
+    }
+
+    /**
+     * TravelChart要绘制的数据
+     */
+    class Data<T : IItem> {
+        val list = ArrayList<T>()
+        // 添加数据时，判断数据是否在屏幕外，再决定是否 invalidate()
+    }
+
+    /**
+     * TravelChart的图表上关键点的数据结构
+     */
+    interface IItem {
+        fun getXAxis(): Float
+        fun getYAxis(): Float
     }
 }
