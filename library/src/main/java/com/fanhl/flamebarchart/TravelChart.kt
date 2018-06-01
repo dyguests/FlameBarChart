@@ -2,7 +2,6 @@ package com.fanhl.flamebarchart
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
@@ -26,7 +25,7 @@ class TravelChart @JvmOverloads constructor(
 
     // --------------------------------- 输入 ---------------------------
 
-    var data: Data<*>? = null
+    var data: DefaultData<*>? = null
         set(value) {
             field = value
             invalidate()
@@ -35,7 +34,7 @@ class TravelChart @JvmOverloads constructor(
     init {
         if (isInEditMode) {
             val random = Random()
-            data = Data<DefaultItem>().apply {
+            data = DefaultData<DefaultItem>().apply {
                 list.apply {
                     fun add(y: Float) {
                         add(DefaultItem(y))
@@ -87,7 +86,7 @@ class TravelChart @JvmOverloads constructor(
     /**
      * TravelChart要绘制的数据
      */
-    class Data<T : IItem> {
+    class DefaultData<T : IItem> {
         val list = ArrayList<T>()
         // 添加数据时，判断数据是否在屏幕外，再决定是否 invalidate()
     }
