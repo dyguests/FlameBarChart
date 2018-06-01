@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.OverScroller
 import java.util.*
 
+
 /**
  * 数据图表
  *
@@ -160,17 +161,24 @@ class TravelChart @JvmOverloads constructor(
                             barsHeight
                     )
 
-                    (this as? StateListDrawable)?.apply {
-                        state = IntArray(android.R.attr.state_pressed)
-                    }
+                    val currentStateDrawable = (this as? StateListDrawable)?.let {
+                        getDrawable(it, IntArray(android.R.attr.state_selected))
+                    } ?: this
 
-                    draw(canvas)
+                    currentStateDrawable.draw(canvas)
                 }
 
             }
         }
 
         canvas.drawCircle(100F, 100F, 100F, paint)
+    }
+
+    private fun getDrawable(stateListDrawable: StateListDrawable, state: IntArray): Drawable {
+        val getStateDrawableIndex = StateListDrawable::class.java.getMethod("getStateDrawableIndex", IntArray::class.java)
+        val getStateDrawable = StateListDrawable::class.java.getMethod("getStateDrawable", Int::class.javaPrimitiveType)
+        val index = getStateDrawableIndex.invoke(stateListDrawable, state) as Int
+        return getStateDrawable.invoke(stateListDrawable, index) as Drawable
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
