@@ -189,6 +189,11 @@ class TravelChart @JvmOverloads constructor(
      */
     interface IItem {
         /**
+         * 获取x轴Label的值
+         */
+        fun getXLabel(): String
+
+        /**
          * 获取y轴坐标值
          */
         fun getYAxis(): Float
@@ -203,6 +208,10 @@ class TravelChart @JvmOverloads constructor(
     }
 
     private data class DefaultItem(val y: Float) : IItem {
+        override fun getXLabel(): String {
+            return "ToDay"
+        }
+
         override fun getYAxis(): Float {
             return y
         }
