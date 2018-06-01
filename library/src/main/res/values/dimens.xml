@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="bar_width">10dp</dimen>
-    <dimen name="bar_interval">9dp</dimen>
+    <dimen name="bar_width">20dp</dimen>
+    <dimen name="bar_interval">18dp</dimen>
 
-    <dimen name="bar_hint_padding">4dp</dimen>
-    <dimen name="x_axis_padding">4dp</dimen>
+    <dimen name="bar_hint_padding">8dp</dimen>
+    <dimen name="x_axis_padding">8dp</dimen>
 </resources>

@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.StateListDrawable
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
+import android.view.VelocityTracker
 import android.view.View
 import android.widget.OverScroller
 import java.util.*
@@ -26,6 +27,31 @@ class TravelChart @JvmOverloads constructor(
     private val paint by lazy { Paint() }
     private val path by lazy { Path() }
     private val scroller by lazy { OverScroller(context) }
+
+    private var mIsBeingDragged = false
+    /** 速度管理 */
+    private val velocityTracker by lazy { VelocityTracker.obtain() }
+
+    private var mTouchSlop: Int = 0
+    private var mMinimumVelocity: Int = 0
+    private var mMaximumVelocity: Int = 0
+    private var mOverscrollDistance: Int = 0
+
+    private var mScrollX: Int
+        get() {
+            return calculationScrollX(currentXAxis, currentXAxisOffsetPercent)
+        }
+        set(value) {
+            val (centerX, centerXOffset) = calculationCenterX(value)
+            this.currentXAxis = centerX
+            this.currentXAxisOffsetPercent = centerXOffset
+        }
+    private var mScrollY: Int
+        get() {
+            return 0
+        }
+        set(value) {
+        }
 
     // --------------------------------- 输入 ---------------------------
 
@@ -181,6 +207,32 @@ class TravelChart @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+    }
+
+    /**
+     * 根据centerX与centerXOffset计算出scrollX
+     */
+    private fun calculationScrollX(centerX: Int, centerXOffset: Float): Int {
+        return ((centerX + centerXOffset) * (barWidth + barInterval)).toInt()
+    }
+
+    /**
+     * 根据scrollX计算出centerX与centerXOffset
+     */
+    private fun calculationCenterX(scrollX: Int): Pair<Int, Float> {
+        var centerX = scrollX / (barWidth + barInterval)
+        var centerXOffset = (scrollX % (barWidth + barInterval)).toFloat() / (barWidth + barInterval)
+        //注意 centerXOffset 的 值在 区间 (-0.5,0.5]中
+        if (centerXOffset > 0.5f) {
+            centerX += 1
+            centerXOffset -= 1
+        }
+
+        return Pair(centerX, centerXOffset)
+    }
+
+    companion object {
+
     }
 
     /**
