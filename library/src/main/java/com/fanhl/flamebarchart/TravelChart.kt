@@ -74,6 +74,12 @@ class TravelChart @JvmOverloads constructor(
     /** bar顶部的提示内容的上下padding */
     var barHintPadding = 0
 
+    /** x轴的中心的背景图案 */
+    var xAxisCurrentBackground: Drawable? = null
+        set(value) {
+            if (field == value) return
+            field = value
+        }
     /** x轴的上下padding */
     var xAxisPadding = 0
 
@@ -122,6 +128,7 @@ class TravelChart @JvmOverloads constructor(
 
         barHintPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_barHintPadding, resources.getDimensionPixelOffset(R.dimen.bar_hint_padding))
 
+        xAxisCurrentBackground = a.getDrawable(R.styleable.TravelChart_xAxisCurrentBackground) ?: ContextCompat.getDrawable(context, R.drawable.x_axis_current_background)
         xAxisPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_xAxisPadding, resources.getDimensionPixelOffset(R.dimen.x_axis_padding))
 
         a.recycle()
@@ -358,6 +365,22 @@ class TravelChart @JvmOverloads constructor(
         drawBars(canvas, barsWidth, barsHeight)
 
         canvas.restoreToCount(barsSaveCount)
+
+        val xAxisPaddingTop = validHeight - xAxisPadding - xAxisContentHeight
+        val xAxisPaddingBottom = xAxisPadding
+        val xAxisPaddingLeft = 0
+        val xAxisPaddingRight = 0
+
+        val xAxisWidth = validWidth - xAxisPaddingLeft - xAxisPaddingRight
+        val xAxisHeight = xAxisContentHeight// validHeight - xAxisPaddingTop - xAxisPaddingBottom
+
+        val xAxisSaveCount = canvas.save()
+        canvas.translate(xAxisPaddingLeft.toFloat(), xAxisPaddingTop.toFloat())
+
+        drawXAxis(canvas, xAxisWidth, xAxisHeight)
+
+        canvas.restoreToCount(xAxisSaveCount)
+
     }
 
     /**
@@ -403,6 +426,28 @@ class TravelChart @JvmOverloads constructor(
                 }
 
             }
+        }
+    }
+
+    /**
+     * 绘制x轴
+     */
+    private fun drawXAxis(canvas: Canvas, xAxisWidth: Int, xAxisHeight: Int) {
+        val horizontalMidpoint = xAxisWidth / 2
+        val verticalMidpoint = xAxisHeight / 2
+
+        val currentBgWidth = 200
+        val currentBgHeight = 100
+
+        //先画 居中的当前的背景
+        xAxisCurrentBackground?.apply {
+            setBounds(
+                    horizontalMidpoint - currentBgWidth / 2,
+                    verticalMidpoint - currentBgHeight / 2,
+                    horizontalMidpoint + currentBgWidth / 2,
+                    verticalMidpoint + currentBgHeight / 2
+            )
+            draw(canvas)
         }
     }
 
