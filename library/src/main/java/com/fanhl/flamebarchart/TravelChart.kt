@@ -38,7 +38,11 @@ class TravelChart @JvmOverloads constructor(
     var barInterval = 0
     /** 柱子的背景图 */
     var barDrawable: Drawable? = null
-    /** x轴的上下间距 */
+
+    /** bar顶部的提示内容的上下padding */
+    var barHintPadding = 0
+
+    /** x轴的上下padding */
     var xAxisPadding = 0
 
     var data: DefaultData<*>? = null
@@ -51,8 +55,11 @@ class TravelChart @JvmOverloads constructor(
 
     var barWidthHalf = 0
 
+    /** bar顶部的提示内容的高度 */
+    var barHintHeight = 0
     /** 绘制x轴的内容的高度 */
     var xAxisContentHeight = 0
+
     /** 当前居中的x轴值 */
     var currentXAxis = 0
     /** 当前居中偏移值 (-0.5,0.5] */
@@ -66,6 +73,8 @@ class TravelChart @JvmOverloads constructor(
         barWidth = a.getDimensionPixelOffset(R.styleable.TravelChart_barWidth, resources.getDimensionPixelOffset(R.dimen.bar_width))
         barInterval = a.getDimensionPixelOffset(R.styleable.TravelChart_barInterval, resources.getDimensionPixelOffset(R.dimen.bar_interval))
         barDrawable = a.getDrawable(R.styleable.TravelChart_barDrawable) ?: ContextCompat.getDrawable(context, R.drawable.selector_bar_drawable)
+
+        barHintPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_barHintPadding, resources.getDimensionPixelOffset(R.dimen.bar_hint_padding))
 
         xAxisPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_xAxisPadding, resources.getDimensionPixelOffset(R.dimen.x_axis_padding))
 
@@ -96,14 +105,17 @@ class TravelChart @JvmOverloads constructor(
      * 绘制区域
      */
     private fun drawValid(canvas: Canvas, validWidth: Int, validHeight: Int) {
-        val barsWidth = validWidth
-        val barsHeight = validHeight - xAxisPadding - xAxisContentHeight - xAxisPadding
+        val barsPaddingTop = barHintPadding + barHintHeight + barHintPadding
+        val barsPaddingBottom = xAxisPadding + xAxisContentHeight + xAxisPadding
 
-        val barsPaddingLeft = 0f
-        val barsPaddingTop = 0f
+        val barsPaddingLeft = 0
+
+        val barsWidth = validWidth - barsPaddingLeft
+        val barsHeight = validHeight - barsPaddingBottom
+
 
         val barsSaveCount = canvas.save()
-        canvas.translate(barsPaddingLeft, barsPaddingTop)
+        canvas.translate(barsPaddingLeft.toFloat(), barsPaddingTop.toFloat())
 
         drawBars(canvas, barsWidth, barsHeight)
 

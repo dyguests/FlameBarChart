@@ -3,5 +3,6 @@
     <dimen name="bar_width">10dp</dimen>
     <dimen name="bar_interval">9dp</dimen>
 
-    <dimen name="x_axis_padding">5dp</dimen>
+    <dimen name="bar_hint_padding">4dp</dimen>
+    <dimen name="x_axis_padding">4dp</dimen>
 </resources>

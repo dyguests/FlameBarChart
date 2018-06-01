@@ -5,6 +5,8 @@
         <attr name="barInterval" format="dimension"/>
         <attr name="barDrawable" format="reference"/>
 
+        <attr name="barHintPadding" format="dimension"/>
+
         <attr name="xAxisPadding" format="dimension"/>
     </declare-styleable>
 </resources>

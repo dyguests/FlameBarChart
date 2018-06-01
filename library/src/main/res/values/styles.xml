@@ -6,6 +6,8 @@
         <item name="barInterval">@dimen/bar_interval</item>
         <item name="barDrawable">@drawable/selector_bar_drawable</item>
 
+        <item name="barHintPadding">@dimen/bar_hint_padding</item>
+
         <item name="xAxisPadding">@dimen/x_axis_padding</item>
     </style>
 </resources>
