@@ -109,9 +109,10 @@ class TravelChart @JvmOverloads constructor(
         val barsPaddingBottom = xAxisPadding + xAxisContentHeight + xAxisPadding
 
         val barsPaddingLeft = 0
+        val barsPaddingRight = 0
 
-        val barsWidth = validWidth - barsPaddingLeft
-        val barsHeight = validHeight - barsPaddingBottom
+        val barsWidth = validWidth - barsPaddingLeft - barsPaddingRight
+        val barsHeight = validHeight - barsPaddingTop - barsPaddingBottom
 
 
         val barsSaveCount = canvas.save()
