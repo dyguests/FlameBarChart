@@ -155,13 +155,15 @@ class TravelChart @JvmOverloads constructor(
 
             (indexStart..indexEnd).forEach { index ->
                 val item = list[index]
-                if (index == currentXAxis) {
+
+                val drawable = if (index == currentXAxis) {
                     barDrawableFocused
                 } else if (false) {
                     barDrawablePressed
                 } else {
                     barDrawableDefault
-                }?.apply {
+                }
+                drawable?.apply {
                     val barCenterX = horizontalMidpoint + ((index - currentXAxis - currentXAxisOffsetPercent) * (barWidth + barInterval)).toInt()
                     setBounds(
                             barCenterX - barWidthHalf,
