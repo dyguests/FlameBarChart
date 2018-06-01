@@ -24,6 +24,7 @@ class TravelChart @JvmOverloads constructor(
     private val scroller by lazy { OverScroller(context) }
 
     // --------------------------------- 输入 ---------------------------
+
     /** 柱宽 */
     var barWidth = 0
     /** 柱间距 */
