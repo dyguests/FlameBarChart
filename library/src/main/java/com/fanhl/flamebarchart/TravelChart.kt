@@ -24,6 +24,10 @@ class TravelChart @JvmOverloads constructor(
     private val scroller by lazy { OverScroller(context) }
 
     // --------------------------------- 输入 ---------------------------
+    /** 柱宽 */
+    var barWidth = 0
+    /** 柱间距 */
+    var barInterval = 0
 
     var data: DefaultData<*>? = null
         set(value) {
@@ -35,34 +39,7 @@ class TravelChart @JvmOverloads constructor(
         if (isInEditMode) {
             val random = Random()
             data = DefaultData<DefaultItem>().apply {
-                list.apply {
-                    fun add(y: Float) {
-                        add(DefaultItem(y))
-                    }
-                    add(random.nextFloat())
-                    add(random.nextFloat())
-                    add(random.nextFloat())
-                    add(random.nextFloat())
-                    add(random.nextFloat())
-
-                    add(random.nextFloat())
-                    add(random.nextFloat())
-                    add(random.nextFloat())
-                    add(random.nextFloat())
-                    add(random.nextFloat())
-
-                    add(random.nextFloat())
-                    add(random.nextFloat())
-                    add(random.nextFloat())
-                    add(random.nextFloat())
-                    add(random.nextFloat())
-
-                    add(random.nextFloat())
-                    add(random.nextFloat())
-                    add(random.nextFloat())
-                    add(random.nextFloat())
-                    add(random.nextFloat())
-                }
+                (1..20).forEach { list.add(DefaultItem(random.nextFloat())) }
             }
         }
     }
@@ -70,9 +47,12 @@ class TravelChart @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val validWidth = width - paddingLeft - paddingRight
+        val validHeight = height - paddingTop - paddingBottom
 
         val saveCount = canvas.save()
         canvas.translate(paddingLeft.toFloat(), paddingRight.toFloat())
+
+        val horizontalMidpoint = validWidth / 2f
 
         canvas.drawCircle(100F, 100F, 100F, paint)
 
