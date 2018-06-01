@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
+import android.view.ViewConfiguration
 import android.widget.OverScroller
 import com.fanhl.util.CompatibleHelper
 import java.util.*
@@ -103,6 +104,13 @@ class TravelChart @JvmOverloads constructor(
     private var mLastMotionX: Int = 0
 
     init {
+        val configuration = ViewConfiguration.get(context)
+        mTouchSlop = configuration.scaledTouchSlop
+        mMinimumVelocity = configuration.scaledMinimumFlingVelocity
+        mMaximumVelocity = configuration.scaledMaximumFlingVelocity
+        mOverscrollDistance = configuration.scaledOverscrollDistance
+        // see more config : /android/widget/HorizontalScrollView.java:222
+
 
         val resources = context.resources
         val a = context.obtainStyledAttributes(attrs, R.styleable.TravelChart, defStyleAttr, R.style.Widget_Travel_Chart)
@@ -125,6 +133,10 @@ class TravelChart @JvmOverloads constructor(
                 (1..20).forEach { list.add(DefaultItem(random.nextFloat())) }
             }
         }
+    }
+
+    override fun performClick(): Boolean {
+        return super.performClick()
     }
 
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
@@ -393,8 +405,6 @@ class TravelChart @JvmOverloads constructor(
 
             }
         }
-
-        canvas.drawCircle(100F, 100F, 100F, paint)
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
