@@ -2,6 +2,7 @@ package com.fanhl.flamebarchart
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
 import android.support.annotation.Dimension
@@ -84,8 +85,15 @@ class TravelChart @JvmOverloads constructor(
             if (field == value) return
             field = value
         }
+    /** x轴的中心的背景图案中文字的padding */
+    var xAxisCurrentBackgroundPadding = 0
     @Dimension
-    var xLabelTextSize = 0
+    var xLabelTextSize = 0f
+        set(value) {
+            if (field == value) return
+            field = value
+            requestLayout()
+        }
     @ColorInt
     var xLabelTextColor = 0
     @ColorInt
@@ -116,6 +124,9 @@ class TravelChart @JvmOverloads constructor(
      */
     private var mLastMotionX: Int = 0
 
+    /** 存放xLabel的尺寸 */
+    private var xLabelTextBounds = Rect()
+
     init {
         val configuration = ViewConfiguration.get(context)
         mTouchSlop = configuration.scaledTouchSlop
@@ -138,11 +149,16 @@ class TravelChart @JvmOverloads constructor(
 
         xAxisPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_xAxisPadding, resources.getDimensionPixelOffset(R.dimen.x_axis_padding))
         xAxisCurrentBackground = a.getDrawable(R.styleable.TravelChart_xAxisCurrentBackground) ?: ContextCompat.getDrawable(context, R.drawable.x_axis_current_background)
-        xLabelTextSize = a.getDimensionPixelOffset(R.styleable.TravelChart_xLabelTextSize, resources.getDimensionPixelOffset(R.dimen.x_label_text_size))
+        xAxisCurrentBackgroundPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_xAxisCurrentBackgroundPadding, resources.getDimensionPixelOffset(R.dimen.x_axis_current_background_padding))
+        xLabelTextSize = a.getDimension(R.styleable.TravelChart_xLabelTextSize, resources.getDimension(R.dimen.x_label_text_size))
         xLabelTextColor = a.getColor(R.styleable.TravelChart_xLabelTextColor, ContextCompat.getColor(context, R.color.x_label_text_color))
         xLabelTextColorFocused = a.getColor(R.styleable.TravelChart_xLabelTextColorFocused, ContextCompat.getColor(context, R.color.x_label_text_color_focused))
 
         a.recycle()
+
+        //x轴label的绘制相关
+        xLabelPaint.textSize = xLabelTextSize
+        xLabelPaint.color = xLabelTextColor
 
         if (isInEditMode) {
             val random = Random()
@@ -357,7 +373,7 @@ class TravelChart @JvmOverloads constructor(
     }
 
     /**
-     * 绘制区域
+     * 绘制有效区域
      */
     private fun drawValid(canvas: Canvas, validWidth: Int, validHeight: Int) {
         val barsPaddingTop = barHintPadding + barHintHeight + barHintPadding
@@ -471,6 +487,9 @@ class TravelChart @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+        xLabelPaint.getTextBounds(X_LABEL_DEFAULT, 0, X_LABEL_DEFAULT.length - 1, xLabelTextBounds)
+        xAxisContentHeight = xAxisCurrentBackgroundPadding + (xLabelTextBounds.bottom - xLabelTextBounds.top) + xAxisCurrentBackgroundPadding
     }
 
     override fun onOverScrolled(scrollX: Int, scrollY: Int, clampedX: Boolean, clampedY: Boolean) {
@@ -548,6 +567,7 @@ class TravelChart @JvmOverloads constructor(
     companion object {
         private const val AUTO_SCROLL_DURATION_DEFAULT = 250
 
+        private const val X_LABEL_DEFAULT = "Today"
     }
 
     /**

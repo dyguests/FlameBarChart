@@ -13,6 +13,7 @@
         <!--底部x轴显示-->
         <attr name="xAxisPadding" format="dimension"/>
         <attr name="xAxisCurrentBackground" format="reference"/>
+        <attr name="xAxisCurrentBackgroundPadding" format="dimension"/>
         <attr name="xLabelTextSize" format="dimension"/>
         <attr name="xLabelTextColor" format="color"/>
         <attr name="xLabelTextColorFocused" format="color"/>
