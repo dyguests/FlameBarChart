@@ -21,6 +21,6 @@ object ColorUtils {
     }
 
     private fun getColorOfDegradateCalculation(colorStart: Int, colorEnd: Int, percent: Float): Int {
-        return (Math.min(colorStart, colorEnd) * (1 - percent) + Math.max(colorStart, colorEnd) * percent).toInt()
+        return (colorStart * (1 - percent) + colorEnd * percent).toInt()
     }
 }
