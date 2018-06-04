@@ -421,16 +421,11 @@ class TravelChart @JvmOverloads constructor(
                 return
             }
 
-            //仅绘制在屏幕内的bar
-            val indexStart = maxOf(
-                    (currentXAxis - (horizontalMidpoint + currentXAxisOffsetPercent * (barWidth + barInterval) + barWidth / 2) / (barWidth + barInterval)).toInt() - 1,
-                    0
-            )
+            val indexStart = getValidIndexStart(barsWidth)
 
-            val indexEnd = minOf(
-                    ((barsWidth - (horizontalMidpoint + currentXAxisOffsetPercent * (barWidth + barInterval) + barWidth / 2)) / (barWidth + barInterval) + currentXAxis).toInt() + 1,
-                    list.size - 1
-            )
+            val listSize = list.size
+
+            val indexEnd = getValidIndexEnd(barsWidth, listSize)
 
             (indexStart..indexEnd).forEach { index ->
                 val item = list[index]
@@ -463,6 +458,8 @@ class TravelChart @JvmOverloads constructor(
         val horizontalMidpoint = xAxisWidth / 2
         val verticalMidpoint = xAxisHeight / 2
 
+        //绘制水平居中的背景框
+
         //注：这里要加一个动态渐变
         val currentBgWidth = 200
 //        val currentBgHeight = xAxisContentHeight
@@ -477,6 +474,9 @@ class TravelChart @JvmOverloads constructor(
             )
             draw(canvas)
         }
+
+        //绘制 xLabels
+
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
@@ -549,6 +549,37 @@ class TravelChart @JvmOverloads constructor(
         }
 
         return Pair(centerX, centerXOffset)
+    }
+
+    /**
+     * 获取有效的（在绘制区域内的）data中list的起始index
+     *
+     * @param width 总绘制宽度
+     */
+    private fun getValidIndexStart(width: Int): Int {
+        val horizontalMidpoint = width / 2
+
+        //仅绘制在屏幕内的bar
+        val indexStart = maxOf(
+                (currentXAxis - (horizontalMidpoint + currentXAxisOffsetPercent * (barWidth + barInterval) + barWidth / 2) / (barWidth + barInterval)).toInt() - 1,
+                0
+        )
+        return indexStart
+    }
+
+    /**
+     * 获取有效的（在绘制区域内的）data中list的结束index
+     *
+     * @param width 总绘制宽度
+     * @param listSize data中list的总长度
+     */
+    private fun getValidIndexEnd(width: Int, listSize: Int): Int {
+        val horizontalMidpoint2 = width / 2
+        val indexEnd = minOf(
+                ((width - (horizontalMidpoint2 + currentXAxisOffsetPercent * (barWidth + barInterval) + barWidth / 2)) / (barWidth + barInterval) + currentXAxis).toInt() + 1,
+                listSize - 1
+        )
+        return indexEnd
     }
 
     /**
