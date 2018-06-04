@@ -7,6 +7,7 @@ import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
 import android.support.annotation.Dimension
+import android.support.annotation.FloatRange
 import android.support.v4.content.ContextCompat
 import android.text.TextPaint
 import android.util.AttributeSet
@@ -14,7 +15,9 @@ import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewConfiguration
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.OverScroller
+import com.fanhl.util.ColorUtils
 import com.fanhl.util.CompatibleHelper
 import java.util.*
 
@@ -31,6 +34,7 @@ class TravelChart @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
     /** 绘制x轴的labels */
     private val xLabelPaint by lazy { TextPaint() }
+    //    private val xLabelGradientInterpolator by lazy { AccelerateDecelerateInterpolator() }
     private val scroller by lazy { OverScroller(context) }
 
     private var mIsBeingDragged = false
@@ -468,12 +472,18 @@ class TravelChart @JvmOverloads constructor(
         forEachValid(data, xAxisWidth) { index, item ->
             val textCenterX = horizontalMidpoint + (index - currentXAxis - currentXAxisOffsetPercent) * (barWidth + barInterval)
             val textCenterY = verticalMidpoint - ((xLabelPaint.descent() + xLabelPaint.ascent()) / 2)
-            // FIXME: 2018/6/4 fanhl 颜色渐变
-            xLabelPaint
+
+            //颜色渐变
+            // 为0时,颜色为xLabelTextColorFocused，为1时颜色为xLabelTextColor，为(0,1)之间时，取这两者之间的值
+            val xLabelPaintColorGradientPercent = Math.min(Math.abs(index - currentXAxis - currentXAxisOffsetPercent), 1f)
+            val xLabelColor = ColorUtils.getColorGradient(xLabelTextColorFocused, xLabelTextColor, xLabelPaintColorGradientPercent)
+
+            xLabelPaint.color = xLabelColor
 
             canvas.drawText(item.getXLabel(), textCenterX, textCenterY, xLabelPaint)
         }
     }
+
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
