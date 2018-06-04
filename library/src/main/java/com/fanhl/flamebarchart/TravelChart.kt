@@ -2,6 +2,7 @@ package com.fanhl.flamebarchart
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
@@ -157,6 +158,7 @@ class TravelChart @JvmOverloads constructor(
         a.recycle()
 
         //x轴label的绘制相关
+        xLabelPaint.textAlign = Paint.Align.CENTER
         xLabelPaint.textSize = xLabelTextSize
         xLabelPaint.color = xLabelTextColor
 
@@ -464,12 +466,12 @@ class TravelChart @JvmOverloads constructor(
         //绘制 xLabels
 
         forEachValid(data, xAxisWidth) { index, item ->
-            val textCenterX = horizontalMidpoint + ((index - currentXAxis - currentXAxisOffsetPercent) * (barWidth + barInterval)).toInt()
-
+            val textCenterX = horizontalMidpoint + (index - currentXAxis - currentXAxisOffsetPercent) * (barWidth + barInterval)
+            val textCenterY = verticalMidpoint - ((xLabelPaint.descent() + xLabelPaint.ascent()) / 2)
             // FIXME: 2018/6/4 fanhl 颜色渐变
             xLabelPaint
 
-            canvas.drawText(item.getXLabel(), textCenterX.toFloat(), verticalMidpoint.toFloat(), xLabelPaint)
+            canvas.drawText(item.getXLabel(), textCenterX, textCenterY, xLabelPaint)
         }
     }
 
