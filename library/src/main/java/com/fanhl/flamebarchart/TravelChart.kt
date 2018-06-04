@@ -2,8 +2,6 @@ package com.fanhl.flamebarchart
 
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Path
 import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
 import android.support.annotation.Dimension
@@ -87,7 +85,7 @@ class TravelChart @JvmOverloads constructor(
             field = value
         }
     @Dimension
-    var xLabelTextSize = 0f
+    var xLabelTextSize = 0
     @ColorInt
     var xLabelTextColor = 0
     @ColorInt
@@ -140,6 +138,9 @@ class TravelChart @JvmOverloads constructor(
 
         xAxisPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_xAxisPadding, resources.getDimensionPixelOffset(R.dimen.x_axis_padding))
         xAxisCurrentBackground = a.getDrawable(R.styleable.TravelChart_xAxisCurrentBackground) ?: ContextCompat.getDrawable(context, R.drawable.x_axis_current_background)
+        xLabelTextSize = a.getDimensionPixelOffset(R.styleable.TravelChart_xLabelTextSize, resources.getDimensionPixelOffset(R.dimen.x_label_text_size))
+        xLabelTextColor = a.getColor(R.styleable.TravelChart_xLabelTextColor, ContextCompat.getColor(context, R.color.x_label_text_color))
+        xLabelTextColorFocused = a.getColor(R.styleable.TravelChart_xLabelTextColorFocused, ContextCompat.getColor(context, R.color.x_label_text_color_focused))
 
         a.recycle()
 
