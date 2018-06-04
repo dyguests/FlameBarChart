@@ -463,16 +463,17 @@ class TravelChart @JvmOverloads constructor(
         val horizontalMidpoint = xAxisWidth / 2
         val verticalMidpoint = xAxisHeight / 2
 
+        //注：这里要加一个动态渐变
         val currentBgWidth = 200
-        val currentBgHeight = 100
+//        val currentBgHeight = xAxisContentHeight
 
         //先画 居中的当前的背景
         xAxisCurrentBackground?.apply {
             setBounds(
                     horizontalMidpoint - currentBgWidth / 2,
-                    verticalMidpoint - currentBgHeight / 2,
+                    verticalMidpoint - xAxisContentHeight / 2,
                     horizontalMidpoint + currentBgWidth / 2,
-                    verticalMidpoint + currentBgHeight / 2
+                    verticalMidpoint + xAxisContentHeight / 2
             )
             draw(canvas)
         }
