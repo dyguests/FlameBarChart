@@ -6,6 +6,7 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
+import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.VelocityTracker
@@ -26,7 +27,8 @@ class TravelChart @JvmOverloads constructor(
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
-    private val paint by lazy { Paint() }
+    /** 绘制x轴的labels */
+    private val xLabelPaint by lazy { TextPaint() }
     private val scroller by lazy { OverScroller(context) }
 
     private var mIsBeingDragged = false
@@ -74,14 +76,15 @@ class TravelChart @JvmOverloads constructor(
     /** bar顶部的提示内容的上下padding */
     var barHintPadding = 0
 
+    /** x轴的上下padding */
+    var xAxisPadding = 0
     /** x轴的中心的背景图案 */
     var xAxisCurrentBackground: Drawable? = null
         set(value) {
             if (field == value) return
             field = value
         }
-    /** x轴的上下padding */
-    var xAxisPadding = 0
+
 
     var data: DefaultData<*>? = null
         set(value) {
@@ -579,7 +582,7 @@ class TravelChart @JvmOverloads constructor(
 
     private data class DefaultItem(val y: Float) : IItem {
         override fun getXLabel(): String {
-            return "ToDay"
+            return if (Math.abs(y - 15) <= 0.01f) "Today" else "$y"
         }
 
         override fun getYAxis(): Float {

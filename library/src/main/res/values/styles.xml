@@ -12,5 +12,8 @@
 
         <item name="xAxisPadding">@dimen/x_axis_padding</item>
         <item name="xAxisCurrentBackground">@drawable/x_axis_current_background</item>
+        <item name="xLabelTextSize">@dimen/x_label_text_size</item>
+        <item name="xLabelTextColor">@color/x_label_text_color</item>
+        <item name="xLabelTextColorFocused">@color/x_label_text_color_selected</item>
     </style>
 </resources>
