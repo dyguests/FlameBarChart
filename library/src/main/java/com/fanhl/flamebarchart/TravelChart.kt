@@ -416,37 +416,23 @@ class TravelChart @JvmOverloads constructor(
     private fun drawBars(canvas: Canvas, barsWidth: Int, barsHeight: Int) {
         val horizontalMidpoint = barsWidth / 2
 
-        data?.apply {
-            if (list.isEmpty()) {
-                return
-            }
-
-            val indexStart = getValidIndexStart(barsWidth)
-
-            val listSize = list.size
-
-            val indexEnd = getValidIndexEnd(barsWidth, listSize)
-
-            (indexStart..indexEnd).forEach { index ->
-                val item = list[index]
-
-                (if (index == currentXAxis) {
-                    barDrawableFocused
-                } else if (false) {
-                    barDrawablePressed
-                } else {
-                    barDrawableDefault
-                })?.apply {
-                    val barCenterX = horizontalMidpoint + ((index - currentXAxis - currentXAxisOffsetPercent) * (barWidth + barInterval)).toInt()
-                    setBounds(
-                            barCenterX - barWidthHalf,
-                            (barsHeight * (1 - item.getYAxis())).toInt(),
-                            barCenterX + barWidthHalf,
-                            barsHeight
-                    )
-                    this.draw(canvas)
-                }
-
+        forEachValid(data, barsWidth) { index, item ->
+            (if (index == currentXAxis) {
+                barDrawableFocused
+            } else if (false) {
+                // FIXME: 2018/6/4 fanhl
+                barDrawablePressed
+            } else {
+                barDrawableDefault
+            })?.apply {
+                val barCenterX = horizontalMidpoint + ((index - currentXAxis - currentXAxisOffsetPercent) * (barWidth + barInterval)).toInt()
+                setBounds(
+                        barCenterX - barWidthHalf,
+                        (barsHeight * (1 - item.getYAxis())).toInt(),
+                        barCenterX + barWidthHalf,
+                        barsHeight
+                )
+                draw(canvas)
             }
         }
     }
@@ -477,6 +463,14 @@ class TravelChart @JvmOverloads constructor(
 
         //绘制 xLabels
 
+        forEachValid(data, xAxisWidth) { index, item ->
+            val textCenterX = horizontalMidpoint + ((index - currentXAxis - currentXAxisOffsetPercent) * (barWidth + barInterval)).toInt()
+
+            // FIXME: 2018/6/4 fanhl 颜色渐变
+            xLabelPaint
+
+            canvas.drawText(item.getXLabel(), textCenterX.toFloat(), verticalMidpoint.toFloat(), xLabelPaint)
+        }
     }
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
@@ -549,6 +543,24 @@ class TravelChart @JvmOverloads constructor(
         }
 
         return Pair(centerX, centerXOffset)
+    }
+
+    /**
+     * 对 data中 在validWidth有效绘制区域内的item进行遍历处理
+     */
+    private fun forEachValid(data: DefaultData<*>?, validWidth: Int, block: (Int, IItem) -> Unit) {
+        data?.apply {
+            if (list.isEmpty()) {
+                return
+            }
+
+            val indexStart = getValidIndexStart(validWidth)
+            val indexEnd = getValidIndexEnd(validWidth, list.size)
+
+            (indexStart..indexEnd).forEach { index ->
+                block(index, list[index])
+            }
+        }
     }
 
     /**
@@ -642,7 +654,7 @@ class TravelChart @JvmOverloads constructor(
 
     private data class DefaultItem(val y: Float) : IItem {
         override fun getXLabel(): String {
-            return if (Math.abs(y - 15) <= 0.01f) "Today" else "$y"
+            return if (Math.abs(y - 15) <= 0.01f) "Today" else "${y.toInt()}"
         }
 
         override fun getYAxis(): Float {
