@@ -163,7 +163,7 @@ class TravelChart @JvmOverloads constructor(
         if (isInEditMode) {
             val random = Random()
             data = DefaultData<DefaultItem>().apply {
-                (1..20).forEach { list.add(DefaultItem(random.nextFloat())) }
+                (1..20).forEach { list.add(DefaultItem(it, random.nextFloat())) }
             }
         }
     }
@@ -652,9 +652,9 @@ class TravelChart @JvmOverloads constructor(
         // 添加数据时，判断数据是否在屏幕外，再决定是否 invalidate()
     }
 
-    private data class DefaultItem(val y: Float) : IItem {
+    private data class DefaultItem(val x: Int, val y: Float) : IItem {
         override fun getXLabel(): String {
-            return if (Math.abs(y - 15) <= 0.01f) "Today" else "${(y * 100).toInt()}"
+            return if (Math.abs(x - 15) <= 0.01f) "Today" else "$x"
         }
 
         override fun getYAxis(): Float {
