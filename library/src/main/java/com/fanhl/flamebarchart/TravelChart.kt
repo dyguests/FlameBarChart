@@ -5,6 +5,8 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.drawable.Drawable
+import android.support.annotation.ColorInt
+import android.support.annotation.Dimension
 import android.support.v4.content.ContextCompat
 import android.text.TextPaint
 import android.util.AttributeSet
@@ -84,7 +86,12 @@ class TravelChart @JvmOverloads constructor(
             if (field == value) return
             field = value
         }
-
+    @Dimension
+    var xLabelTextSize = 0f
+    @ColorInt
+    var xLabelTextColor = 0
+    @ColorInt
+    var xLabelTextColorFocused = 0
 
     var data: DefaultData<*>? = null
         set(value) {
@@ -131,8 +138,8 @@ class TravelChart @JvmOverloads constructor(
 
         barHintPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_barHintPadding, resources.getDimensionPixelOffset(R.dimen.bar_hint_padding))
 
-        xAxisCurrentBackground = a.getDrawable(R.styleable.TravelChart_xAxisCurrentBackground) ?: ContextCompat.getDrawable(context, R.drawable.x_axis_current_background)
         xAxisPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_xAxisPadding, resources.getDimensionPixelOffset(R.dimen.x_axis_padding))
+        xAxisCurrentBackground = a.getDrawable(R.styleable.TravelChart_xAxisCurrentBackground) ?: ContextCompat.getDrawable(context, R.drawable.x_axis_current_background)
 
         a.recycle()
 
