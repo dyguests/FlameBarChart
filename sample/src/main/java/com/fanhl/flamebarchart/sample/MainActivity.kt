@@ -14,13 +14,13 @@ class MainActivity : AppCompatActivity() {
 
         val random = Random()
         chart_travel.data = TravelChart.DefaultData<Item>().apply {
-            (1..20).forEach { list.add(Item(random.nextFloat())) }
+            (1..20).forEach { list.add(Item(it, random.nextFloat())) }
         }
     }
 
-    data class Item(val y: Float) : TravelChart.IItem {
+    data class Item(val x: Int, val y: Float) : TravelChart.IItem {
         override fun getXLabel(): String {
-            return "-$y-"
+            return if (Math.abs(x - 15) <= 0.01f) "Today" else "$x"
         }
 
         override fun getYAxis(): Float {

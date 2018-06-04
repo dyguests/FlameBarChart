@@ -654,7 +654,7 @@ class TravelChart @JvmOverloads constructor(
 
     private data class DefaultItem(val y: Float) : IItem {
         override fun getXLabel(): String {
-            return if (Math.abs(y - 15) <= 0.01f) "Today" else "${y.toInt()}"
+            return if (Math.abs(y - 15) <= 0.01f) "Today" else "${(y * 100).toInt()}"
         }
 
         override fun getYAxis(): Float {
