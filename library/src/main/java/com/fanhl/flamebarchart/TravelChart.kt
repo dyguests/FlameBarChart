@@ -678,6 +678,11 @@ class TravelChart @JvmOverloads constructor(
         fun getXLabel(): String
 
         /**
+         * 获取x轴对应项居中时顶部的提示文字
+         */
+        fun getXHint(): String
+
+        /**
          * 获取y轴坐标值
          */
         fun getYAxis(): Float
@@ -694,6 +699,10 @@ class TravelChart @JvmOverloads constructor(
     private data class DefaultItem(val x: Int, val y: Float) : IItem {
         override fun getXLabel(): String {
             return if (Math.abs(x - 15) <= 0.01f) "Today" else "$x"
+        }
+
+        override fun getXHint(): String {
+            return "${(y * 100).toInt()}km"
         }
 
         override fun getYAxis(): Float {

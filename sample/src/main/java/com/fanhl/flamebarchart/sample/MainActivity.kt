@@ -23,6 +23,10 @@ class MainActivity : AppCompatActivity() {
             return if (Math.abs(x - 15) <= 0.01f) "Today" else "$x"
         }
 
+        override fun getXHint(): String {
+            return "${(y * 100).toInt()}km"
+        }
+
         override fun getYAxis(): Float {
             return y
         }
