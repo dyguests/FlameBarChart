@@ -222,6 +222,11 @@ class TravelChart @JvmOverloads constructor(
 
         when (action and MotionEvent.ACTION_MASK) {
             MotionEvent.ACTION_DOWN -> {
+                //只有一个元素也没办法滚动
+                if (getChildCount() <= 1) {
+                    return false
+                }
+
                 mIsBeingDragged = !scroller.isFinished
                 if (mIsBeingDragged) {
                     this.parent?.requestDisallowInterceptTouchEvent(true)
@@ -317,6 +322,8 @@ class TravelChart @JvmOverloads constructor(
                         changeCurrentXAxis(currentXAxis)
                     }
                 }
+                //暂时防warning
+                performClick()
             }
             MotionEvent.ACTION_CANCEL -> {
                 if (mIsBeingDragged && getChildCount() > 1) {
@@ -338,6 +345,7 @@ class TravelChart @JvmOverloads constructor(
                 }
             }
         }
+
         return true
     }
 
