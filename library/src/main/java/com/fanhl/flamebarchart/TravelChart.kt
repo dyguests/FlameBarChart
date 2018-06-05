@@ -19,6 +19,7 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.OverScroller
 import com.fanhl.util.ColorUtils
 import com.fanhl.util.CompatibleHelper
+import com.fanhl.util.ScrollerUtils
 import java.util.*
 
 
@@ -144,6 +145,8 @@ class TravelChart @JvmOverloads constructor(
     private var textBounds = Rect()
 
     init {
+        ScrollerUtils.init(context)
+
         val configuration = ViewConfiguration.get(context)
         mTouchSlop = configuration.scaledTouchSlop
         mMinimumVelocity = configuration.scaledMinimumFlingVelocity
@@ -195,6 +198,8 @@ class TravelChart @JvmOverloads constructor(
 
     override fun performClick(): Boolean {
         return super.performClick()
+
+        // FIXME: 2018/6/5 fanhl
     }
 
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
@@ -335,7 +340,12 @@ class TravelChart @JvmOverloads constructor(
             val width = width - paddingRight - paddingLeft
 //            val right = getScrollRange()
 
-            scroller.fling(mScrollX, mScrollY, velocityX, 0, 0, getScrollRange(), 0, 0, width / 2, 0)
+            //注意，这里划到结束要直接滑动到对应xAxis,没有currentXAxisOffsetPercent
+//            scroller.fling(mScrollX, mScrollY, velocityX, 0, 0, getScrollRange(), 0, 0, width / 2, 0)
+
+            val dx: Int = (ScrollerUtils.getSplineFlingDistance(velocityX) * Math.signum(velocityX.toDouble())).toInt()
+            val duration = ScrollerUtils.getSplineFlingDuration(velocityX)
+            scroller.startScroll(mScrollX, mScrollY, dx, 0, duration)
 
             val movingRight = velocityX > 0
 
