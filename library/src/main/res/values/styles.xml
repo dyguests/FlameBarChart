@@ -9,6 +9,7 @@
         <item name="barDrawableFocused">@drawable/bar_drawable_focused</item>
 
         <item name="barHintPadding">@dimen/bar_hint_padding</item>
+        <item name="barHintBackground">@drawable/bar_hint_background</item>
 
         <item name="xAxisPadding">@dimen/x_axis_padding</item>
         <item name="xAxisCurrentBackground">@drawable/x_axis_current_background</item>

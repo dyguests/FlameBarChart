@@ -81,6 +81,8 @@ class TravelChart @JvmOverloads constructor(
 
     /** bar顶部的提示内容的上下padding */
     var barHintPadding = 0
+    /** bar顶部背景图 */
+    var barHintBackground: Drawable? = null
 
     /** x轴的上下padding */
     var xAxisPadding = 0
@@ -151,6 +153,7 @@ class TravelChart @JvmOverloads constructor(
         barDrawableFocused = a.getDrawable(R.styleable.TravelChart_barDrawableFocused) ?: ContextCompat.getDrawable(context, R.drawable.bar_drawable_focused)
 
         barHintPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_barHintPadding, resources.getDimensionPixelOffset(R.dimen.bar_hint_padding))
+        barHintBackground = a.getDrawable(R.styleable.TravelChart_barHintBackground) ?: ContextCompat.getDrawable(context, R.drawable.bar_hint_background)
 
         xAxisPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_xAxisPadding, resources.getDimensionPixelOffset(R.dimen.x_axis_padding))
         xAxisCurrentBackground = a.getDrawable(R.styleable.TravelChart_xAxisCurrentBackground) ?: ContextCompat.getDrawable(context, R.drawable.x_axis_current_background)
