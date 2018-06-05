@@ -475,7 +475,7 @@ class TravelChart @JvmOverloads constructor(
 
             //获取两个宽度之间的某个宽度
             val labelWidthGradient = if (previousLabelWidth >= 0) {
-                (currentLabelWidth * (1 - Math.abs(currentXAxisOffsetPercent * 2)) + previousLabelWidth * (Math.abs(currentXAxisOffsetPercent * 2))).toInt()
+                (currentLabelWidth * (1 - Math.abs(currentXAxisOffsetPercent)) + previousLabelWidth * Math.abs(currentXAxisOffsetPercent)).toInt()
             } else currentLabelWidth
 
             var currentBgWidth = xAxisCurrentBackgroundPadding + labelWidthGradient + xAxisCurrentBackgroundPadding

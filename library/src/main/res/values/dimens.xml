@@ -6,6 +6,6 @@
     <dimen name="bar_hint_padding">8dp</dimen>
 
     <dimen name="x_axis_padding">8dp</dimen>
-    <dimen name="x_axis_current_background_padding">2dp</dimen>
+    <dimen name="x_axis_current_background_padding">8dp</dimen>
     <dimen name="x_label_text_size">11sp</dimen>
 </resources>
