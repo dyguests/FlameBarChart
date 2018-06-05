@@ -161,6 +161,7 @@ class TravelChart @JvmOverloads constructor(
 
         barHintPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_barHintPadding, resources.getDimensionPixelOffset(R.dimen.bar_hint_padding))
         barHintBackground = a.getDrawable(R.styleable.TravelChart_barHintBackground) ?: ContextCompat.getDrawable(context, R.drawable.bar_hint_background)
+        barHintBackgroundPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_barHintBackgroundPadding, resources.getDimensionPixelOffset(R.dimen.bar_hint_padding))
         barHintTextSize = a.getDimension(R.styleable.TravelChart_barHintTextSize, resources.getDimension(R.dimen.bar_hint_text_size))
         barHintTextColor = a.getColor(R.styleable.TravelChart_barHintTextColor, ContextCompat.getColor(context, R.color.bar_hint_text_color))
 
@@ -548,15 +549,35 @@ class TravelChart @JvmOverloads constructor(
         val horizontalMidpoint = barHintWidth / 2
         val verticalMidpoint = barHintHeight / 2
 
-        barHintBackground?.apply {
-            //        xAxisCurrentBackground?.apply {
-            setBounds(
-                    horizontalMidpoint - 100,
-                    verticalMidpoint - 100,
-                    horizontalMidpoint + 100,
-                    verticalMidpoint + 100
-            )
-            draw(canvas)
+        //绘制水平居中提示
+        data?.list?.takeIf { it.isNotEmpty() }?.apply {
+            //当前要显示在居中背景中的元素的索引
+            val currentIndex = minOf(maxOf(0, currentXAxis), size - 1)
+
+            val x = horizontalMidpoint - currentXAxisOffsetPercent * (barWidth + barInterval)
+            val y = verticalMidpoint
+
+            val currentXLabel = get(currentIndex).getXHint()
+            xHintPaint.getTextBounds(currentXLabel, 0, currentXLabel.length - 1, textBounds)
+
+            val currentLabelWidth = textBounds.right - textBounds.left
+
+            val currentBgWidth = barHintBackgroundPadding + currentLabelWidth + barHintBackgroundPadding
+
+
+            //绘制背景
+            barHintBackground?.apply {
+                //        xAxisCurrentBackground?.apply {
+                setBounds(
+                        (x - currentBgWidth / 2).toInt(),
+                        y - barHintContentHeight / 2,
+                        (x + currentBgWidth / 2).toInt(),
+                        y + barHintContentHeight / 2
+                )
+                draw(canvas)
+            }
+
+            canvas.drawText(currentXLabel, x, y - ((xLabelPaint.descent() + xLabelPaint.ascent()) / 2), xHintPaint)
         }
     }
 
