@@ -589,9 +589,17 @@ class TravelChart @JvmOverloads constructor(
             } else {
                 1 - 2 * Math.abs(currentXAxisOffsetPercent)
             })
-            val velocityAlpha = minOf(maxOf(2 - Math.abs(scroller.currVelocity / BAR_HINT_VISIBLE_THRESHOLD), 0f), 1f)
+            val velocityAlpha = xHintAlphaGradientInterpolator.getInterpolation(if (currentXAxis < 0 || (currentXAxis <= 0 && currentXAxisOffsetPercent < 0f)) {
+                //超过两端时不隐藏
+                1f
+            } else if (currentXAxis > size - 1 || (currentXAxis >= size - 1 && currentXAxisOffsetPercent > 0f)) {
+                //超过两端时不隐藏
+                1f
+            } else {
+                minOf(maxOf(2 - Math.abs(scroller.currVelocity / BAR_HINT_VISIBLE_THRESHOLD), 0f), 1f)
+            })
 
-            Log.d("TravelChart", "drawBarHint: scroller.currVelocity:${scroller.currVelocity} currentXAxis:$currentXAxis currentXAxisOffsetPercent:$currentXAxisOffsetPercent offsetAlpha:$offsetAlpha")
+//            Log.d("TravelChart", "drawBarHint: scroller.currVelocity:${scroller.currVelocity} mScrollX:$mScrollX currentXAxis:$currentXAxis currentXAxisOffsetPercent:$currentXAxisOffsetPercent offsetAlpha:$offsetAlpha")
 
             val alpha = (offsetAlpha * velocityAlpha * 255).toInt()
 
