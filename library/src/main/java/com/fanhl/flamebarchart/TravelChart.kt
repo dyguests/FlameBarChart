@@ -451,22 +451,49 @@ class TravelChart @JvmOverloads constructor(
         val verticalMidpoint = xAxisHeight / 2
 
         //绘制水平居中的背景框
+        data?.list?.takeIf { it.isNotEmpty() }?.apply {
+            //当前要显示在居中背景中的元素的索引
+            val currentIndex = minOf(maxOf(0, currentXAxis), size - 1)
+            //上一个在居中背景中显示的元素的索引 , 若无此元素则显示-1
+            val previousIndex = when {
+                currentXAxisOffsetPercent > 0f -> (currentIndex + 1).takeIf { it < size } ?: -1
+                currentXAxisOffsetPercent < 0f -> currentIndex - 1
+                else -> -1
+            }
 
-        //注：这里要加一个动态渐变
-        val currentBgWidth = 200
-//        val currentBgHeight = xAxisContentHeight
+            //注：这里要加一个动态渐变
 
-        //先画 居中的当前的背景
-        xAxisCurrentBackground?.apply {
-            setBounds(
-                    horizontalMidpoint - currentBgWidth / 2,
-                    verticalMidpoint - xAxisContentHeight / 2,
-                    horizontalMidpoint + currentBgWidth / 2,
-                    verticalMidpoint + xAxisContentHeight / 2
-            )
-            draw(canvas)
+            val currentXLabel = get(currentIndex).getXLabel()
+            xLabelPaint.getTextBounds(currentXLabel, 0, currentXLabel.length - 1, xLabelTextBounds)
+
+            val currentLabelWidth = xLabelTextBounds.right - xLabelTextBounds.left
+            val previousLabelWidth = if (previousIndex >= 0) {
+                val previousXLabel = get(previousIndex).getXLabel()
+                xLabelPaint.getTextBounds(previousXLabel, 0, previousXLabel.length - 1, xLabelTextBounds)
+                xLabelTextBounds.right - xLabelTextBounds.left
+            } else -1
+
+            //获取两个宽度之间的某个宽度
+            val labelWidthGradient = if (previousLabelWidth >= 0) {
+                (currentLabelWidth * (1 - Math.abs(currentXAxisOffsetPercent * 2)) + previousLabelWidth * (Math.abs(currentXAxisOffsetPercent * 2))).toInt()
+            } else currentLabelWidth
+
+            var currentBgWidth = xAxisCurrentBackgroundPadding + labelWidthGradient + xAxisCurrentBackgroundPadding
+            val currentBgHeight = xAxisContentHeight
+
+            //中间的背景的宽度不能小于高度（保持至少为圆）
+            currentBgWidth = maxOf(currentBgWidth, currentBgHeight)
+            //先画 居中的当前的背景
+            xAxisCurrentBackground?.apply {
+                setBounds(
+                        horizontalMidpoint - currentBgWidth / 2,
+                        verticalMidpoint - currentBgHeight / 2,
+                        horizontalMidpoint + currentBgWidth / 2,
+                        verticalMidpoint + currentBgHeight / 2
+                )
+                draw(canvas)
+            }
         }
-
         //绘制 xLabels
 
         forEachValid(data, xAxisWidth) { index, item ->
