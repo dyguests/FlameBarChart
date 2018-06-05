@@ -580,7 +580,7 @@ class TravelChart @JvmOverloads constructor(
             } else {
                 1 - 2 * Math.abs(currentXAxisOffsetPercent)
             })
-            val velocityAlpha = minOf(maxOf(2 - Math.abs(scroller.currVelocity / 100), 0f), 1f)
+            val velocityAlpha = minOf(maxOf(2 - Math.abs(scroller.currVelocity / BAR_HINT_VISIBLE_THRESHOLD), 0f), 1f)
 
             Log.d("TravelChart", "drawBarHint: scroller.currVelocity:${scroller.currVelocity} currentXAxis:$currentXAxis currentXAxisOffsetPercent:$currentXAxisOffsetPercent offsetAlpha:$offsetAlpha")
 
@@ -744,6 +744,13 @@ class TravelChart @JvmOverloads constructor(
         private const val AUTO_SCROLL_DURATION_DEFAULT = 250
 
         private const val X_LABEL_DEFAULT = "Today"
+
+        /**
+         * barHint 是否显示 的 滑动速度阀值
+         * 小于阀值是完全显示，大于2倍阀值时完全不显示
+         * 在1倍至2倍区间中半透明显示
+         */
+        private const val BAR_HINT_VISIBLE_THRESHOLD = 100f
     }
 
     /**
