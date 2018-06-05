@@ -215,6 +215,10 @@ class TravelChart @JvmOverloads constructor(
 
     }
 
+    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
+        return super.dispatchTouchEvent(event)
+    }
+
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
         velocityTracker.addMovement(ev)
 
@@ -291,7 +295,11 @@ class TravelChart @JvmOverloads constructor(
 //                        }
                     }
 
-
+                    if (oldX <= 0 && deltaX < 0) {
+                        return false
+                    } else if (oldX >= getScrollRange() && deltaX > 0) {
+                        return false
+                    }
                 }
             }
             MotionEvent.ACTION_UP -> {
