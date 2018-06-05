@@ -161,7 +161,7 @@ class TravelChart @JvmOverloads constructor(
 
         barHintPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_barHintPadding, resources.getDimensionPixelOffset(R.dimen.bar_hint_padding))
         barHintBackground = a.getDrawable(R.styleable.TravelChart_barHintBackground) ?: ContextCompat.getDrawable(context, R.drawable.bar_hint_background)
-        barHintBackgroundPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_barHintBackgroundPadding, resources.getDimensionPixelOffset(R.dimen.bar_hint_padding))
+        barHintBackgroundPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_barHintBackgroundPadding, resources.getDimensionPixelOffset(R.dimen.bar_hint_background_padding))
         barHintTextSize = a.getDimension(R.styleable.TravelChart_barHintTextSize, resources.getDimension(R.dimen.bar_hint_text_size))
         barHintTextColor = a.getColor(R.styleable.TravelChart_barHintTextColor, ContextCompat.getColor(context, R.color.bar_hint_text_color))
 
@@ -564,10 +564,8 @@ class TravelChart @JvmOverloads constructor(
 
             val currentBgWidth = barHintBackgroundPadding + currentLabelWidth + barHintBackgroundPadding
 
-
             //绘制背景
             barHintBackground?.apply {
-                //        xAxisCurrentBackground?.apply {
                 setBounds(
                         (x - currentBgWidth / 2).toInt(),
                         y - barHintContentHeight / 2,
