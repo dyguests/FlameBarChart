@@ -495,12 +495,12 @@ class TravelChart @JvmOverloads constructor(
             //注：这里要加一个动态渐变
 
             val currentXLabel = get(currentIndex).getXLabel()
-            xLabelPaint.getTextBounds(currentXLabel, 0, currentXLabel.length - 1, textBounds)
+            xLabelPaint.getTextBounds(currentXLabel, 0, currentXLabel.length, textBounds)
 
             val currentLabelWidth = textBounds.width()
             val previousLabelWidth = if (previousIndex >= 0) {
                 val previousXLabel = get(previousIndex).getXLabel()
-                xLabelPaint.getTextBounds(previousXLabel, 0, previousXLabel.length - 1, textBounds)
+                xLabelPaint.getTextBounds(previousXLabel, 0, previousXLabel.length, textBounds)
                 textBounds.right - textBounds.left
             } else -1
 
@@ -558,7 +558,7 @@ class TravelChart @JvmOverloads constructor(
             val y = verticalMidpoint
 
             val currentXLabel = get(currentIndex).getXHint()
-            xHintPaint.getTextBounds(currentXLabel, 0, currentXLabel.length - 1, textBounds)
+            xHintPaint.getTextBounds(currentXLabel, 0, currentXLabel.length, textBounds)
 
             val currentLabelWidth = textBounds.width()
 
@@ -594,9 +594,9 @@ class TravelChart @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
-        xLabelPaint.getTextBounds(X_LABEL_DEFAULT, 0, X_LABEL_DEFAULT.length - 1, textBounds)
+        xLabelPaint.getTextBounds(X_LABEL_DEFAULT, 0, X_LABEL_DEFAULT.length, textBounds)
         xAxisContentHeight = xAxisCurrentBackgroundPadding + (textBounds.bottom - textBounds.top) + xAxisCurrentBackgroundPadding
-        xHintPaint.getTextBounds(X_LABEL_DEFAULT, 0, X_LABEL_DEFAULT.length - 1, textBounds)
+        xHintPaint.getTextBounds(X_LABEL_DEFAULT, 0, X_LABEL_DEFAULT.length, textBounds)
         barHintContentHeight = barHintBackgroundPadding + (textBounds.bottom - textBounds.top) + barHintBackgroundPadding
     }
 
