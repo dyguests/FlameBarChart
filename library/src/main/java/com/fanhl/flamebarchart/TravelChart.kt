@@ -1,9 +1,8 @@
 package com.fanhl.flamebarchart
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Rect
+import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
 import android.support.annotation.Dimension
@@ -570,8 +569,11 @@ class TravelChart @JvmOverloads constructor(
             //中间的背景的宽度不能小于高度（保持至少为圆）
             currentBgWidth = maxOf(currentBgWidth, currentBgHeight)
 
+            val alpha = ((1 - 2 * Math.abs(currentXAxisOffsetPercent)) * 255).toInt()
+
             //绘制背景
             barHintBackground?.apply {
+                this.alpha = alpha
                 setBounds(
                         (x - currentBgWidth / 2).toInt(),
                         (y - currentBgHeight / 2).toInt(),
@@ -580,7 +582,7 @@ class TravelChart @JvmOverloads constructor(
                 )
                 draw(canvas)
             }
-
+            xHintPaint.alpha = alpha
             canvas.drawText(currentXLabel, x, y - ((xHintPaint.descent() + xHintPaint.ascent()) / 2), xHintPaint)
         }
     }
