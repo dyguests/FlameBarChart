@@ -1,21 +1,15 @@
 package com.fanhl.flamebarchart.sample
 
-import android.support.design.widget.TabLayout
+import android.os.Bundle
 import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
-
+import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.support.v7.app.AppCompatActivity
+import android.view.*
 import com.fanhl.flamebarchart.TravelChart
 import com.fanhl.flamebarchart.sample.model.Item
-
 import kotlinx.android.synthetic.main.activity_multi_charts.*
 import kotlinx.android.synthetic.main.fragment_multi_charts.*
 import kotlinx.android.synthetic.main.fragment_multi_charts.view.*
@@ -52,12 +46,6 @@ class MultiChartsActivity : AppCompatActivity() {
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
-
-        val random = Random()
-        chart_travel.data = TravelChart.DefaultData<Item>().apply {
-            (1..20).forEach { list.add(Item(it, random.nextFloat())) }
-        }
-        chart_travel.setXAxis(10)
     }
 
 
@@ -109,6 +97,15 @@ class MultiChartsActivity : AppCompatActivity() {
             val rootView = inflater.inflate(R.layout.fragment_multi_charts, container, false)
             rootView.section_label.text = getString(R.string.section_format, arguments?.getInt(ARG_SECTION_NUMBER))
             return rootView
+        }
+
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+            super.onViewCreated(view, savedInstanceState)
+            val random = Random()
+            chart_travel.data = TravelChart.DefaultData<Item>().apply {
+                (1..20).forEach { list.add(Item(it, random.nextFloat())) }
+            }
+            chart_travel.setXAxis(10)
         }
 
         companion object {
