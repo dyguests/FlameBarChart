@@ -584,6 +584,7 @@ class TravelChart @JvmOverloads constructor(
             val x = horizontalMidpoint + (currentIndex - currentXAxis - currentXAxisOffsetPercent) * (barWidth + barInterval)
 
             val y = verticalMidpoint + (barsHeight * (1 - currentItem.getYAxis()))
+            val yText = (barHintBackgroundPaddingTop + (barHintContentHeight - barHintBackgroundPaddingTop - barHintBackgroundPaddingBottom) / 2) + (barsHeight * (1 - currentItem.getYAxis()))
 
             val currentXLabel = currentItem.getXHint()
             xHintPaint.getTextBounds(currentXLabel, 0, currentXLabel.length, textBounds)
@@ -631,7 +632,7 @@ class TravelChart @JvmOverloads constructor(
                 draw(canvas)
             }
             xHintPaint.alpha = alpha
-            canvas.drawText(currentXLabel, x, y - ((xHintPaint.descent() + xHintPaint.ascent()) / 2), xHintPaint)
+            canvas.drawText(currentXLabel, x, yText - ((xHintPaint.descent() + xHintPaint.ascent()) / 2), xHintPaint)
         }
     }
 
