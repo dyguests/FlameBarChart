@@ -7,6 +7,9 @@
         <attr name="barDrawablePressed" format="reference"/>
         <attr name="barDrawableFocused" format="reference"/>
 
+        <attr name="barIndicatorDrawable" format="reference"/>
+        <attr name="barIndicatorWidth" format="dimension"/>
+
         <!--顶部提示文字-->
         <attr name="barHintPadding" format="dimension"/>
         <attr name="barHintBackground" format="reference"/>

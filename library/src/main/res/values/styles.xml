@@ -8,6 +8,9 @@
         <item name="barDrawablePressed">@drawable/bar_drawable_pressed</item>
         <item name="barDrawableFocused">@drawable/bar_drawable_focused</item>
 
+        <item name="barIndicatorDrawable">@drawable/bar_indicator_drawable</item>
+        <item name="barIndicatorWidth">@dimen/bar_indicator_width</item>
+
         <item name="barHintPadding">@dimen/bar_hint_padding</item>
         <item name="barHintBackground">@drawable/bar_hint_background</item>
         <item name="barHintBackgroundPadding">@dimen/bar_hint_background_padding</item>

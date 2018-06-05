@@ -82,6 +82,11 @@ class TravelChart @JvmOverloads constructor(
     var barDrawablePressed: Drawable? = null
     var barDrawableFocused: Drawable? = null
 
+    /** 水平中线的指示线 */
+    var barIndicatorDrawable: Drawable? = null
+    @Dimension
+    var barIndicatorWidth = 0f
+
     /** bar顶部的提示内容的上下padding */
     var barHintPadding = 0
     /** bar顶部背景图 */
@@ -171,6 +176,9 @@ class TravelChart @JvmOverloads constructor(
         barDrawableDefault = a.getDrawable(R.styleable.TravelChart_barDrawableDefault) ?: ContextCompat.getDrawable(context, R.drawable.bar_drawable_default)
         barDrawablePressed = a.getDrawable(R.styleable.TravelChart_barDrawablePressed) ?: ContextCompat.getDrawable(context, R.drawable.bar_drawable_pressed)
         barDrawableFocused = a.getDrawable(R.styleable.TravelChart_barDrawableFocused) ?: ContextCompat.getDrawable(context, R.drawable.bar_drawable_focused)
+
+        barIndicatorDrawable = a.getDrawable(R.styleable.TravelChart_barIndicatorDrawable) ?: ContextCompat.getDrawable(context, R.drawable.bar_indicator_drawable)
+        barIndicatorWidth = a.getDimension(R.styleable.TravelChart_barIndicatorWidth, resources.getDimension(R.dimen.bar_indicator_width))
 
         barHintPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_barHintPadding, resources.getDimensionPixelOffset(R.dimen.bar_hint_padding))
         barHintBackground = a.getDrawable(R.styleable.TravelChart_barHintBackground) ?: ContextCompat.getDrawable(context, R.drawable.bar_hint_background)
@@ -545,6 +553,7 @@ class TravelChart @JvmOverloads constructor(
         canvas.translate(barsPaddingLeft.toFloat(), barsPaddingTop.toFloat())
 
         drawBars(canvas, barsWidth, barsHeight)
+        drawBarIndicator(canvas, barsWidth, barsHeight)
 
         canvas.restoreToCount(barsSaveCount)
 
@@ -581,6 +590,7 @@ class TravelChart @JvmOverloads constructor(
     private fun drawBars(canvas: Canvas, barsWidth: Int, barsHeight: Int) {
         val horizontalMidpoint = barsWidth / 2
 
+        //绘制每条bar
         forEachValid(data, barsWidth) { index, item ->
             (if (index == currentXAxis) {
                 barDrawableFocused
@@ -599,6 +609,21 @@ class TravelChart @JvmOverloads constructor(
                 )
                 draw(canvas)
             }
+        }
+    }
+
+    private fun drawBarIndicator(canvas: Canvas, barsWidth: Int, barsHeight: Int) {
+        val horizontalMidpoint = barsWidth / 2
+
+        //绘制水平居中的中线
+        barIndicatorDrawable?.apply {
+            setBounds(
+                    (horizontalMidpoint - barIndicatorWidth / 2).toInt(),
+                    0,
+                    (horizontalMidpoint + barIndicatorWidth / 2).toInt(),
+                    barsHeight
+            )
+            draw(canvas)
         }
     }
 
