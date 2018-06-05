@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
         chart_travel.data = TravelChart.DefaultData<Item>().apply {
             (1..20).forEach { list.add(Item(it, random.nextFloat())) }
         }
+        chart_travel.setXAxis(10)
     }
 
     data class Item(val x: Int, val y: Float) : TravelChart.IItem {

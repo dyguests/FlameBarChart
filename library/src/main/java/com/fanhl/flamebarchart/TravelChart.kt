@@ -772,6 +772,13 @@ class TravelChart @JvmOverloads constructor(
         invalidate()
     }
 
+    /**
+     * 设置x值(设置当前元素显示第几个item)
+     */
+    fun setXAxis(xAxis: Int) {
+        changeCurrentXAxis(xAxis)
+    }
+
     companion object {
         private const val AUTO_SCROLL_DURATION_DEFAULT = 250
 
