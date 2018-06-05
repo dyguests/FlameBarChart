@@ -9,10 +9,12 @@ import android.support.annotation.Dimension
 import android.support.v4.content.ContextCompat
 import android.text.TextPaint
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewConfiguration
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.OverScroller
 import com.fanhl.util.ColorUtils
 import com.fanhl.util.CompatibleHelper
@@ -33,8 +35,8 @@ class TravelChart @JvmOverloads constructor(
     private val xLabelPaint by lazy { TextPaint() }
     /** 顶部提示文字的宽度 */
     private val xHintPaint by lazy { TextPaint() }
+    private val xHintAlphaGradientInterpolator by lazy { AccelerateDecelerateInterpolator() }
 
-    //    private val xLabelGradientInterpolator by lazy { AccelerateDecelerateInterpolator() }
     private val scroller by lazy { OverScroller(context) }
 
     private var mIsBeingDragged = false
@@ -554,7 +556,7 @@ class TravelChart @JvmOverloads constructor(
             //当前要显示在居中背景中的元素的索引
             val currentIndex = minOf(maxOf(0, currentXAxis), size - 1)
             val currentItem = get(currentIndex)
-            val x = horizontalMidpoint - currentXAxisOffsetPercent * (barWidth + barInterval)
+            val x = horizontalMidpoint + (currentIndex - currentXAxis - currentXAxisOffsetPercent) * (barWidth + barInterval)
 
             val y = verticalMidpoint + (barsHeight * (1 - currentItem.getYAxis()))
 
@@ -569,7 +571,20 @@ class TravelChart @JvmOverloads constructor(
             //中间的背景的宽度不能小于高度（保持至少为圆）
             currentBgWidth = maxOf(currentBgWidth, currentBgHeight)
 
-            val alpha = ((1 - 2 * Math.abs(currentXAxisOffsetPercent)) * 255).toInt()
+            val offsetAlpha = xHintAlphaGradientInterpolator.getInterpolation(if (currentXAxis < 0 || (currentXAxis <= 0 && currentXAxisOffsetPercent < 0f)) {
+                //超过两端时不隐藏
+                1f
+            } else if (currentXAxis > size - 1 || (currentXAxis >= size - 1 && currentXAxisOffsetPercent > 0f)) {
+                //超过两端时不隐藏
+                1f
+            } else {
+                1 - 2 * Math.abs(currentXAxisOffsetPercent)
+            })
+            val velocityAlpha = 1f//minOf(maxOf(2 - Math.abs(scroller.currVelocity / 1000), 0f), 1f)
+
+            Log.d("TravelChart", "drawBarHint: scroller.currVelocity:${scroller.currVelocity} currentXAxis:$currentXAxis currentXAxisOffsetPercent:$currentXAxisOffsetPercent offsetAlpha:$offsetAlpha")
+
+            val alpha = (offsetAlpha * velocityAlpha * 255).toInt()
 
             //绘制背景
             barHintBackground?.apply {
