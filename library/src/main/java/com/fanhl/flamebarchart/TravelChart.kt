@@ -7,7 +7,6 @@ import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
 import android.support.annotation.Dimension
-import android.support.annotation.FloatRange
 import android.support.v4.content.ContextCompat
 import android.text.TextPaint
 import android.util.AttributeSet
@@ -15,7 +14,6 @@ import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewConfiguration
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.OverScroller
 import com.fanhl.util.ColorUtils
 import com.fanhl.util.CompatibleHelper
@@ -34,6 +32,9 @@ class TravelChart @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
     /** 绘制x轴的labels */
     private val xLabelPaint by lazy { TextPaint() }
+    /** 顶部提示文字的宽度 */
+    private val xHintPaint by lazy { TextPaint() }
+
     //    private val xLabelGradientInterpolator by lazy { AccelerateDecelerateInterpolator() }
     private val scroller by lazy { OverScroller(context) }
 
@@ -83,6 +84,12 @@ class TravelChart @JvmOverloads constructor(
     var barHintPadding = 0
     /** bar顶部背景图 */
     var barHintBackground: Drawable? = null
+    /** bar的背景图案中文字的padding */
+    var barHintBackgroundPadding = 0
+    @Dimension
+    var barHintTextSize = 0f
+    @ColorInt
+    var barHintTextColor = 0
 
     /** x轴的上下padding */
     var xAxisPadding = 0
@@ -116,8 +123,8 @@ class TravelChart @JvmOverloads constructor(
 
     private var barWidthHalf = 0
 
-    /** bar顶部的提示内容的高度 */
-    private var barHintHeight = 0
+    /** bar顶部的提示内容文字的高度 */
+    private var barHintContentHeight = 0
     /** 绘制x轴的内容的高度 */
     private var xAxisContentHeight = 0
 
@@ -131,8 +138,8 @@ class TravelChart @JvmOverloads constructor(
      */
     private var mLastMotionX: Int = 0
 
-    /** 存放xLabel的尺寸 */
-    private var xLabelTextBounds = Rect()
+    /** 存放xLabel等的尺寸 */
+    private var textBounds = Rect()
 
     init {
         val configuration = ViewConfiguration.get(context)
@@ -154,6 +161,8 @@ class TravelChart @JvmOverloads constructor(
 
         barHintPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_barHintPadding, resources.getDimensionPixelOffset(R.dimen.bar_hint_padding))
         barHintBackground = a.getDrawable(R.styleable.TravelChart_barHintBackground) ?: ContextCompat.getDrawable(context, R.drawable.bar_hint_background)
+        barHintTextSize = a.getDimension(R.styleable.TravelChart_barHintTextSize, resources.getDimension(R.dimen.bar_hint_text_size))
+        barHintTextColor = a.getColor(R.styleable.TravelChart_barHintTextColor, ContextCompat.getColor(context, R.color.bar_hint_text_color))
 
         xAxisPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_xAxisPadding, resources.getDimensionPixelOffset(R.dimen.x_axis_padding))
         xAxisCurrentBackground = a.getDrawable(R.styleable.TravelChart_xAxisCurrentBackground) ?: ContextCompat.getDrawable(context, R.drawable.x_axis_current_background)
@@ -168,6 +177,10 @@ class TravelChart @JvmOverloads constructor(
         xLabelPaint.textAlign = Paint.Align.CENTER
         xLabelPaint.textSize = xLabelTextSize
         xLabelPaint.color = xLabelTextColor
+
+        xHintPaint.textAlign = Paint.Align.CENTER
+        xHintPaint.textSize = barHintTextSize
+        xHintPaint.color = barHintTextColor
 
         if (isInEditMode) {
             val random = Random()
@@ -385,7 +398,12 @@ class TravelChart @JvmOverloads constructor(
      * 绘制有效区域
      */
     private fun drawValid(canvas: Canvas, validWidth: Int, validHeight: Int) {
-        val barsPaddingTop = barHintPadding + barHintHeight + barHintPadding
+        val barHintTop = barHintPadding
+        val barHintBottom = barHintTop + barHintContentHeight
+        var barHintLeft = 0
+        var barHintRight = 0
+
+        val barsPaddingTop = barHintPadding + barHintContentHeight + barHintPadding
         val barsPaddingBottom = xAxisPadding + xAxisContentHeight + xAxisPadding
 
         val barsPaddingLeft = 0
@@ -417,6 +435,15 @@ class TravelChart @JvmOverloads constructor(
 
         canvas.restoreToCount(xAxisSaveCount)
 
+        val barHintWidth = validWidth - barHintLeft - barHintRight
+        val barHintHeight = barHintContentHeight
+
+        val barHintSaveCount = canvas.save()
+        canvas.translate(barHintTop.toFloat(), barHintLeft.toFloat())
+
+        drawBarHint(canvas, barHintWidth, barHintHeight)
+
+        canvas.restoreToCount(barHintSaveCount)
     }
 
     /**
@@ -467,13 +494,13 @@ class TravelChart @JvmOverloads constructor(
             //注：这里要加一个动态渐变
 
             val currentXLabel = get(currentIndex).getXLabel()
-            xLabelPaint.getTextBounds(currentXLabel, 0, currentXLabel.length - 1, xLabelTextBounds)
+            xLabelPaint.getTextBounds(currentXLabel, 0, currentXLabel.length - 1, textBounds)
 
-            val currentLabelWidth = xLabelTextBounds.right - xLabelTextBounds.left
+            val currentLabelWidth = textBounds.right - textBounds.left
             val previousLabelWidth = if (previousIndex >= 0) {
                 val previousXLabel = get(previousIndex).getXLabel()
-                xLabelPaint.getTextBounds(previousXLabel, 0, previousXLabel.length - 1, xLabelTextBounds)
-                xLabelTextBounds.right - xLabelTextBounds.left
+                xLabelPaint.getTextBounds(previousXLabel, 0, previousXLabel.length - 1, textBounds)
+                textBounds.right - textBounds.left
             } else -1
 
             //获取两个宽度之间的某个宽度
@@ -514,6 +541,24 @@ class TravelChart @JvmOverloads constructor(
         }
     }
 
+    /**
+     * 绘制顶部提示区域
+     */
+    private fun drawBarHint(canvas: Canvas, barHintWidth: Int, barHintHeight: Int) {
+        val horizontalMidpoint = barHintWidth / 2
+        val verticalMidpoint = barHintHeight / 2
+
+        barHintBackground?.apply {
+            setBounds(
+                    horizontalMidpoint - 10,
+                    verticalMidpoint - 10,
+                    horizontalMidpoint + 10,
+                    verticalMidpoint + 10
+            )
+            draw(canvas)
+        }
+    }
+
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         super.onLayout(changed, left, top, right, bottom)
@@ -525,8 +570,10 @@ class TravelChart @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
 
-        xLabelPaint.getTextBounds(X_LABEL_DEFAULT, 0, X_LABEL_DEFAULT.length - 1, xLabelTextBounds)
-        xAxisContentHeight = xAxisCurrentBackgroundPadding + (xLabelTextBounds.bottom - xLabelTextBounds.top) + xAxisCurrentBackgroundPadding
+        xLabelPaint.getTextBounds(X_LABEL_DEFAULT, 0, X_LABEL_DEFAULT.length - 1, textBounds)
+        xAxisContentHeight = xAxisCurrentBackgroundPadding + (textBounds.bottom - textBounds.top) + xAxisCurrentBackgroundPadding
+        xHintPaint.getTextBounds(X_LABEL_DEFAULT, 0, X_LABEL_DEFAULT.length - 1, textBounds)
+        barHintContentHeight = barHintBackgroundPadding + (textBounds.bottom - textBounds.top) + barHintBackgroundPadding
     }
 
     override fun onOverScrolled(scrollX: Int, scrollY: Int, clampedX: Boolean, clampedY: Boolean) {

@@ -10,6 +10,8 @@
         <!--顶部提示文字-->
         <attr name="barHintPadding" format="dimension"/>
         <attr name="barHintBackground" format="reference"/>
+        <attr name="barHintTextSize" format="dimension"/>
+        <attr name="barHintTextColor" format="color"/>
 
         <!--底部x轴显示-->
         <attr name="xAxisPadding" format="dimension"/>
