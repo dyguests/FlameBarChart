@@ -442,7 +442,8 @@ class TravelChart @JvmOverloads constructor(
         val barHintSaveCount = canvas.save()
         canvas.translate(barHintLeft.toFloat(), barHintTop.toFloat())
 
-        drawBarHint(canvas, barHintWidth, barHintHeight)
+        // 注意 这个 barHint 会跟随 bar 的高度变化
+        drawBarHint(canvas, barHintWidth, barHintHeight, barsHeight)
 
         canvas.restoreToCount(barHintSaveCount)
     }
@@ -545,7 +546,7 @@ class TravelChart @JvmOverloads constructor(
     /**
      * 绘制顶部提示区域
      */
-    private fun drawBarHint(canvas: Canvas, barHintWidth: Int, barHintHeight: Int) {
+    private fun drawBarHint(canvas: Canvas, barHintWidth: Int, barHintHeight: Int, barsHeight: Int) {
         val horizontalMidpoint = barHintWidth / 2
         val verticalMidpoint = barHintHeight / 2
 
@@ -553,11 +554,12 @@ class TravelChart @JvmOverloads constructor(
         data?.list?.takeIf { it.isNotEmpty() }?.apply {
             //当前要显示在居中背景中的元素的索引
             val currentIndex = minOf(maxOf(0, currentXAxis), size - 1)
-
+            val currentItem = get(currentIndex)
             val x = horizontalMidpoint - currentXAxisOffsetPercent * (barWidth + barInterval)
-            val y = verticalMidpoint
 
-            val currentXLabel = get(currentIndex).getXHint()
+            val y = verticalMidpoint + (barsHeight * (1 - currentItem.getYAxis()))
+
+            val currentXLabel = currentItem.getXHint()
             xHintPaint.getTextBounds(currentXLabel, 0, currentXLabel.length, textBounds)
 
             val currentLabelWidth = textBounds.width()
@@ -572,9 +574,9 @@ class TravelChart @JvmOverloads constructor(
             barHintBackground?.apply {
                 setBounds(
                         (x - currentBgWidth / 2).toInt(),
-                        y - currentBgHeight / 2,
+                        (y - currentBgHeight / 2).toInt(),
                         (x + currentBgWidth / 2).toInt(),
-                        y + currentBgHeight / 2
+                        (y + currentBgHeight / 2).toInt()
                 )
                 draw(canvas)
             }
