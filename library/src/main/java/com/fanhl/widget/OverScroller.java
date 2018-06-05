@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package android.widget;
+package com.fanhl.widget;
 
 import android.content.Context;
 import android.hardware.SensorManager;

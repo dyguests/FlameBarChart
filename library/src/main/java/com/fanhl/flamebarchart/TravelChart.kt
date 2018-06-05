@@ -341,11 +341,11 @@ class TravelChart @JvmOverloads constructor(
 //            val right = getScrollRange()
 
             //注意，这里划到结束要直接滑动到对应xAxis,没有currentXAxisOffsetPercent
-//            scroller.fling(mScrollX, mScrollY, velocityX, 0, 0, getScrollRange(), 0, 0, width / 2, 0)
+            scroller.fling(mScrollX, mScrollY, velocityX, 0, 0, getScrollRange(), 0, 0, width / 2, 0)
 
-            val dx: Int = (ScrollerUtils.getSplineFlingDistance(velocityX) * Math.signum(velocityX.toDouble())).toInt()
-            val duration = ScrollerUtils.getSplineFlingDuration(velocityX)
-            scroller.startScroll(mScrollX, mScrollY, dx, 0, duration)
+//            val dx: Int = (ScrollerUtils.getSplineFlingDistance(velocityX) * Math.signum(velocityX.toDouble())).toInt()
+//            val duration = ScrollerUtils.getSplineFlingDuration(velocityX)
+//            scroller.startScroll(mScrollX, mScrollY, dx, 0, duration)
 
             val movingRight = velocityX > 0
 
