@@ -78,15 +78,29 @@ public class OverScroller {
      * @hide
      */
     public OverScroller(Context context, Interpolator interpolator, boolean flywheel) {
+        this(context, interpolator, flywheel, new SplineOverScroller(context));
+    }
+
+    /**
+     * add by fanhl
+     *
+     * @param context
+     * @param interpolator
+     * @param flywheel
+     * @param scrollerX
+     *         自定义的scrollerX
+     */
+    public OverScroller(Context context, Interpolator interpolator, boolean flywheel, SplineOverScroller scrollerX) {
         if (interpolator == null) {
             mInterpolator = new ViscousFluidInterpolator();
         } else {
             mInterpolator = interpolator;
         }
         mFlywheel = flywheel;
-        mScrollerX = new SplineOverScroller(context);
+        mScrollerX = scrollerX;
         mScrollerY = new SplineOverScroller(context);
     }
+
 
     /**
      * Creates an OverScroller with flywheel enabled.
@@ -587,7 +601,7 @@ public class OverScroller {
                 Math.signum(yvel) == Math.signum(dy);
     }
 
-    static class SplineOverScroller {
+    public static class SplineOverScroller {
         // Initial position
         private int mStart;
 
@@ -688,7 +702,7 @@ public class OverScroller {
             mFlingFriction = friction;
         }
 
-        SplineOverScroller(Context context) {
+        public SplineOverScroller(Context context) {
             mFinished = true;
             final float ppi = context.getResources().getDisplayMetrics().density * 160.0f;
             mPhysicalCoeff = SensorManager.GRAVITY_EARTH // g (m/s^2)
@@ -833,7 +847,7 @@ public class OverScroller {
             return Math.log(INFLEXION * Math.abs(velocity) / (mFlingFriction * mPhysicalCoeff));
         }
 
-        private double getSplineFlingDistance(int velocity) {
+        public double getSplineFlingDistance(int velocity) {
             final double l = getSplineDeceleration(velocity);
             final double decelMinusOne = DECELERATION_RATE - 1.0;
             return mFlingFriction * mPhysicalCoeff * Math.exp(DECELERATION_RATE / decelMinusOne * l);
@@ -1006,6 +1020,10 @@ public class OverScroller {
             mCurrentPosition = mStart + (int) Math.round(distance);
 
             return true;
+        }
+
+        public int getmStart() {
+            return mStart;
         }
     }
 

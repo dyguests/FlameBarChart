@@ -38,7 +38,7 @@ class TravelChart @JvmOverloads constructor(
     private val xHintPaint by lazy { TextPaint() }
     private val xHintAlphaGradientInterpolator by lazy { AccelerateDecelerateInterpolator() }
 
-    private val scroller by lazy { OverScroller(context) }
+    private val scroller by lazy { OverScroller(context, null, true, SnapSplineOverScroller(context)) }
 
     private var mIsBeingDragged = false
     /** 速度管理 */
@@ -824,6 +824,29 @@ class TravelChart @JvmOverloads constructor(
 
         override fun getYAxis(): Float {
             return y
+        }
+    }
+
+    /**
+     * 直接滚动到对应xAxis的scroller
+     *
+     * 这里划到结束要直接滑动到对应xAxis,没有currentXAxisOffsetPercent
+     */
+    inner class SnapSplineOverScroller(context: Context) : OverScroller.SplineOverScroller(context) {
+        override fun getSplineFlingDistance(velocity: Int): Double {
+            val splineFlingDistance = super.getSplineFlingDistance(velocity)
+            val destX = mScrollX + splineFlingDistance * Math.signum(velocity.toFloat())
+
+            val remainder = destX % (barWidth + barInterval)
+
+            val offset = if (remainder > (barWidth + barInterval) / 2) {
+                remainder - barWidth + barInterval
+            } else {
+                remainder
+            }
+
+            Log.d("SnapSplineOverScroller", "getSplineFlingDistance: r0:${mScrollX.toDouble() / (barWidth + barInterval)} r1:${(destX - offset) / (barWidth + barInterval)}")
+            return splineFlingDistance - offset
         }
     }
 }
