@@ -215,17 +215,97 @@ class TravelChart @JvmOverloads constructor(
 
     }
 
-    override fun dispatchTouchEvent(event: MotionEvent?): Boolean {
-        return super.dispatchTouchEvent(event)
+    /**
+     * 这里是滑动边后 交给父布局消费去
+     */
+    var needConsumeTouch = true
+
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        val action = ev?.action ?: return super.dispatchTouchEvent(ev)
+
+        when (action and MotionEvent.ACTION_MASK) {
+            MotionEvent.ACTION_DOWN -> {
+//                mLastMotionX = ev.x.toInt()
+                needConsumeTouch = true
+            }
+            MotionEvent.ACTION_MOVE -> {
+                val x = ev.x.toInt()
+                var deltaX = mLastMotionX - x
+
+                val oldX = mScrollX
+                val oldY = 0
+
+                //到边后交给交给父布局
+                if (oldX <= 0 && deltaX < 0) {
+                    Log.d(TAG, "dispatchTouchEvent: return false")
+
+                    needConsumeTouch = false
+                    parent.requestDisallowInterceptTouchEvent(false)
+                    return false
+                } else if (oldX >= getScrollRange() && deltaX > 0) {
+                    Log.d(TAG, "dispatchTouchEvent: return false")
+
+                    needConsumeTouch = false
+                    parent.requestDisallowInterceptTouchEvent(false)
+                    return false
+                }
+            }
+        }
+
+        parent.requestDisallowInterceptTouchEvent(needConsumeTouch)
+        val b = super.dispatchTouchEvent(ev)
+        Log.d(TAG, "dispatchTouchEvent: b:$b")
+        return b
     }
+
+//    var downX = 0f
+//    var downY = 0f
+//    var needConsumeTouch = true
+//    val allowDragTop = true
+//    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+//        if (ev.action == MotionEvent.ACTION_DOWN) {
+//            downY = ev.rawY
+//            downX = ev.rawX
+//            needConsumeTouch = true // 默认情况下，listView内部的滚动优先，默认情况下由该listView去消费touch事件
+////            allowDragTop = isAtTop()
+//        } else if (ev.action == MotionEvent.ACTION_MOVE) {
+//            //			if(downX-ev.getRawX()>40||ev.getRawX()-downX>40){
+//            //				getParent().requestDisallowInterceptTouchEvent(false);
+//            //				return false;
+//            //			}else {
+//            //				getParent().requestDisallowInterceptTouchEvent(true);
+//            //			}
+//            if (!needConsumeTouch) {
+//                // 在最顶端且向上拉了，则这个touch事件交给父类去处理
+//                parent.requestDisallowInterceptTouchEvent(false)
+//                return false
+//            } else if (allowDragTop) {
+//                // needConsumeTouch尚未被定性，此处给其定性
+//                // 允许拖动到底部的下一页，而且又向上拖动了，就将touch事件交给父view
+//                if (ev.rawY - downY > 2) {
+//                    // flag设置，由父类去消费
+//                    needConsumeTouch = false
+//                    parent.requestDisallowInterceptTouchEvent(false)
+//                    return false
+//                }
+//            }
+//        }
+//
+//        // 通知父view是否要处理touch事件
+//        parent.requestDisallowInterceptTouchEvent(needConsumeTouch)
+//        return super.dispatchTouchEvent(ev)
+//    }
 
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
         velocityTracker.addMovement(ev)
 
         val action = ev?.action ?: return false
 
+        Log.d(TAG, "onTouchEvent: action:$action")
+
         when (action and MotionEvent.ACTION_MASK) {
             MotionEvent.ACTION_DOWN -> {
+                Log.d(TAG, "onTouchEvent: ACTION_DOWN")
                 //只有一个元素也没办法滚动
                 if (getChildCount() <= 1) {
                     return false
@@ -243,6 +323,7 @@ class TravelChart @JvmOverloads constructor(
                 mLastMotionX = ev.x.toInt()
             }
             MotionEvent.ACTION_MOVE -> {
+                Log.d(TAG, "onTouchEvent: ACTION_MOVE")
                 val x = ev.x.toInt()
                 var deltaX = mLastMotionX - x
                 if (!mIsBeingDragged && Math.abs(deltaX) > mTouchSlop) {
@@ -295,14 +376,17 @@ class TravelChart @JvmOverloads constructor(
 //                        }
                     }
 
-                    if (oldX <= 0 && deltaX < 0) {
-                        return false
-                    } else if (oldX >= getScrollRange() && deltaX > 0) {
-                        return false
-                    }
+//                    if (oldX <= 0 && deltaX < 0) {
+//                        Log.d(TAG, "onTouchEvent: return false")
+//                        return false
+//                    } else if (oldX >= getScrollRange() && deltaX > 0) {
+//                        Log.d(TAG, "onTouchEvent: return false")
+//                        return false
+//                    }
                 }
             }
             MotionEvent.ACTION_UP -> {
+                Log.d(TAG, "onTouchEvent: ACTION_UP")
                 if (mIsBeingDragged) {
                     velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity.toFloat())
                     val initialVelocity = velocityTracker.xVelocity.toInt()
@@ -334,6 +418,7 @@ class TravelChart @JvmOverloads constructor(
                 performClick()
             }
             MotionEvent.ACTION_CANCEL -> {
+                Log.d(TAG, "onTouchEvent: ACTION_CANCEL")
                 if (mIsBeingDragged && getChildCount() > 1) {
                     if (scroller.springBack(mScrollX, mScrollY, 0, getScrollRange(), 0, 0)) {
                         CompatibleHelper.postInvalidateOnAnimation(this)
@@ -353,7 +438,7 @@ class TravelChart @JvmOverloads constructor(
                 }
             }
         }
-
+        Log.d(TAG, "onTouchEvent: return true")
         return true
     }
 
@@ -798,6 +883,8 @@ class TravelChart @JvmOverloads constructor(
     }
 
     companion object {
+        private const val TAG = "TravelChart"
+
         private const val AUTO_SCROLL_DURATION_DEFAULT = 250
 
         private const val X_LABEL_DEFAULT = "Today"
