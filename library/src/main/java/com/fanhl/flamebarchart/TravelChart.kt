@@ -558,24 +558,28 @@ class TravelChart @JvmOverloads constructor(
             val y = verticalMidpoint
 
             val currentXLabel = get(currentIndex).getXHint()
-            xHintPaint.getTextBounds(currentXLabel, 0, currentXLabel.length - 1, textBounds)
+            xLabelPaint.getTextBounds(currentXLabel, 0, currentXLabel.length - 1, textBounds)
 
             val currentLabelWidth = textBounds.right - textBounds.left
 
-            val currentBgWidth = barHintBackgroundPadding + currentLabelWidth + barHintBackgroundPadding
+            var currentBgWidth = barHintBackgroundPadding + currentLabelWidth + barHintBackgroundPadding
+            val currentBgHeight = barHintContentHeight
+
+            //中间的背景的宽度不能小于高度（保持至少为圆）
+            currentBgWidth = maxOf(currentBgWidth, currentBgHeight)
 
             //绘制背景
             barHintBackground?.apply {
                 setBounds(
                         (x - currentBgWidth / 2).toInt(),
-                        y - barHintContentHeight / 2,
+                        y - currentBgHeight / 2,
                         (x + currentBgWidth / 2).toInt(),
-                        y + barHintContentHeight / 2
+                        y + currentBgHeight / 2
                 )
                 draw(canvas)
             }
 
-            canvas.drawText(currentXLabel, x, y - ((xLabelPaint.descent() + xLabelPaint.ascent()) / 2), xHintPaint)
+            canvas.drawText(currentXLabel, x, y - ((xLabelPaint.descent() + xLabelPaint.ascent()) / 2), xLabelPaint)
         }
     }
 
@@ -772,7 +776,7 @@ class TravelChart @JvmOverloads constructor(
         }
 
         override fun getXHint(): String {
-            return "${(y * 100).toInt()}km"
+            return "${(x * y * 100).toInt()}km"
         }
 
         override fun getYAxis(): Float {

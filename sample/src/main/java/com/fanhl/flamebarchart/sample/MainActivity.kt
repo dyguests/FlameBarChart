@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun getXHint(): String {
-            return "${(y * 100).toInt()}km"
+            return "${(x * y * 100).toInt()}km"
         }
 
         override fun getYAxis(): Float {
