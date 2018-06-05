@@ -439,7 +439,7 @@ class TravelChart @JvmOverloads constructor(
         val barHintHeight = barHintContentHeight
 
         val barHintSaveCount = canvas.save()
-        canvas.translate(barHintTop.toFloat(), barHintLeft.toFloat())
+        canvas.translate(barHintLeft.toFloat(), barHintTop.toFloat())
 
         drawBarHint(canvas, barHintWidth, barHintHeight)
 
@@ -549,11 +549,12 @@ class TravelChart @JvmOverloads constructor(
         val verticalMidpoint = barHintHeight / 2
 
         barHintBackground?.apply {
+            //        xAxisCurrentBackground?.apply {
             setBounds(
-                    horizontalMidpoint - 10,
-                    verticalMidpoint - 10,
-                    horizontalMidpoint + 10,
-                    verticalMidpoint + 10
+                    horizontalMidpoint - 100,
+                    verticalMidpoint - 100,
+                    horizontalMidpoint + 100,
+                    verticalMidpoint + 100
             )
             draw(canvas)
         }
