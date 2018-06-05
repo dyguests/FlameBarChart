@@ -212,6 +212,7 @@ class TravelChart @JvmOverloads constructor(
         return super.performClick()
 
         // FIXME: 2018/6/5 fanhl
+
     }
 
     override fun onTouchEvent(ev: MotionEvent?): Boolean {
