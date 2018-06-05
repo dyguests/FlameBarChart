@@ -1,5 +1,6 @@
 package com.fanhl.flamebarchart
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -158,6 +159,9 @@ class TravelChart @JvmOverloads constructor(
 
     /** 存放xLabel等的尺寸 */
     private var textBounds = Rect()
+
+    /** 重置data的一个初始动画 */
+    private var resetAnimator: ValueAnimator? = null
 
     init {
         val configuration = ViewConfiguration.get(context)
