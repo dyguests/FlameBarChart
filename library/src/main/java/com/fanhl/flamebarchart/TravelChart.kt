@@ -893,14 +893,19 @@ class TravelChart @JvmOverloads constructor(
     /**
      *设置当前的xAxis
      */
-    private fun changeCurrentXAxis(xAxis: Int) {
+    private fun changeCurrentXAxis(xAxis: Int, animated: Boolean = true) {
         if (!scroller.isFinished) {
             scroller.abortAnimation()
         }
 
         val startScrollX = calculationScrollX(this.currentXAxis, currentXAxisOffsetPercent)
         val endScrollX = calculationScrollX(xAxis, 0f)
-        scroller.startScroll(startScrollX, 0, endScrollX - startScrollX, 0, AUTO_SCROLL_DURATION_DEFAULT)
+        if (animated) {
+            scroller.startScroll(startScrollX, 0, endScrollX - startScrollX, 0, AUTO_SCROLL_DURATION_DEFAULT)
+        } else {
+            //这里还没有测试
+            scroller.startScroll(startScrollX, 0, endScrollX - startScrollX, 0, 0)
+        }
         invalidate()
     }
 
@@ -908,7 +913,11 @@ class TravelChart @JvmOverloads constructor(
      * 设置x值(设置当前元素显示第几个item)
      */
     fun setXAxis(xAxis: Int) {
-        changeCurrentXAxis(xAxis)
+        setXAxis(xAxis, true)
+    }
+
+    fun setXAxis(xAxis: Int, animated: Boolean) {
+        changeCurrentXAxis(xAxis, animated)
     }
 
     companion object {
