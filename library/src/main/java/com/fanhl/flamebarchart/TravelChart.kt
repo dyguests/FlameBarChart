@@ -845,6 +845,8 @@ class TravelChart @JvmOverloads constructor(
                 remainder
             }
 
+            // FIXME: 2018/6/5 fanhl 这里滑动还是对不准
+
             Log.d("SnapSplineOverScroller", "getSplineFlingDistance: r0:${mScrollX.toDouble() / (barWidth + barInterval)} r1:${(destX - offset) / (barWidth + barInterval)}")
             return splineFlingDistance - offset
         }
