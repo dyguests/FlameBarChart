@@ -1,8 +1,9 @@
 package com.fanhl.flamebarchart
 
 import android.content.Context
-import android.graphics.*
-import android.graphics.drawable.BitmapDrawable
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
 import android.support.annotation.Dimension
@@ -273,7 +274,7 @@ class TravelChart @JvmOverloads constructor(
             MotionEvent.ACTION_UP -> {
                 if (mIsBeingDragged) {
                     velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity.toFloat())
-                    val initialVelocity = velocityTracker.getXVelocity().toInt()
+                    val initialVelocity = velocityTracker.xVelocity.toInt()
 
                     if (getChildCount() > 1) {
                         if (Math.abs(initialVelocity) > mMinimumVelocity) {
@@ -323,7 +324,7 @@ class TravelChart @JvmOverloads constructor(
     }
 
     /**
-     * Fling the scroll view
+     * Fling the scroll vie
      *
      * @param velocityX The initial velocity in the X direction. Positive
      * numbers mean that the finger/cursor is moving down the screen,
@@ -332,7 +333,7 @@ class TravelChart @JvmOverloads constructor(
     private fun fling(velocityX: Int) {
         if (getChildCount() > 0) {
             val width = width - paddingRight - paddingLeft
-            val right = getScrollRange()
+//            val right = getScrollRange()
 
             scroller.fling(mScrollX, mScrollY, velocityX, 0, 0, getScrollRange(), 0, 0, width / 2, 0)
 
@@ -354,7 +355,7 @@ class TravelChart @JvmOverloads constructor(
     }
 
     override fun scrollTo(x: Int, y: Int) {
-        if (mScrollX !== x || 0 !== y) {
+        if (mScrollX != x || 0 != y) {
             val oldX = mScrollX
             val oldY = mScrollY
             mScrollX = x
@@ -401,9 +402,9 @@ class TravelChart @JvmOverloads constructor(
      */
     private fun drawValid(canvas: Canvas, validWidth: Int, validHeight: Int) {
         val barHintTop = barHintPadding
-        val barHintBottom = barHintTop + barHintContentHeight
+//        val barHintBottom = barHintTop + barHintContentHeight
         var barHintLeft = 0
-        var barHintRight = 0
+        val barHintRight = 0
 
         val barsPaddingTop = barHintPadding + barHintContentHeight + barHintPadding
         val barsPaddingBottom = xAxisPadding + xAxisContentHeight + xAxisPadding
@@ -423,7 +424,7 @@ class TravelChart @JvmOverloads constructor(
         canvas.restoreToCount(barsSaveCount)
 
         val xAxisPaddingTop = validHeight - xAxisPadding - xAxisContentHeight
-        val xAxisPaddingBottom = xAxisPadding
+//        val xAxisPaddingBottom = xAxisPadding
         val xAxisPaddingLeft = 0
         val xAxisPaddingRight = 0
 
