@@ -11,6 +11,10 @@
         <attr name="barHintPadding" format="dimension"/>
         <attr name="barHintBackground" format="reference"/>
         <attr name="barHintBackgroundPadding" format="dimension"/>
+        <attr name="barHintBackgroundPaddingLeft" format="dimension"/>
+        <attr name="barHintBackgroundPaddingTop" format="dimension"/>
+        <attr name="barHintBackgroundPaddingRight" format="dimension"/>
+        <attr name="barHintBackgroundPaddingBottom" format="dimension"/>
         <attr name="barHintTextSize" format="dimension"/>
         <attr name="barHintTextColor" format="color"/>
 

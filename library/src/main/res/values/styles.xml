@@ -11,6 +11,10 @@
         <item name="barHintPadding">@dimen/bar_hint_padding</item>
         <item name="barHintBackground">@drawable/bar_hint_background</item>
         <item name="barHintBackgroundPadding">@dimen/bar_hint_background_padding</item>
+        <item name="barHintBackgroundPaddingLeft">@dimen/bar_hint_background_padding</item>
+        <item name="barHintBackgroundPaddingTop">@dimen/bar_hint_background_padding</item>
+        <item name="barHintBackgroundPaddingRight">@dimen/bar_hint_background_padding</item>
+        <item name="barHintBackgroundPaddingBottom">@dimen/bar_hint_background_padding</item>
         <item name="barHintTextSize">@dimen/bar_hint_text_size</item>
         <item name="barHintTextColor">@color/bar_hint_text_color</item>
 

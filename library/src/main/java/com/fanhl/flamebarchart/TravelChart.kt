@@ -88,6 +88,17 @@ class TravelChart @JvmOverloads constructor(
     var barHintBackground: Drawable? = null
     /** bar的背景图案中文字的padding */
     var barHintBackgroundPadding = 0
+        set(value) {
+            field = value
+            barHintBackgroundPaddingLeft = value
+            barHintBackgroundPaddingTop = value
+            barHintBackgroundPaddingRight = value
+            barHintBackgroundPaddingBottom = value
+        }
+    var barHintBackgroundPaddingLeft = 0
+    var barHintBackgroundPaddingTop = 0
+    var barHintBackgroundPaddingRight = 0
+    var barHintBackgroundPaddingBottom = 0
     @Dimension
     var barHintTextSize = 0f
     @ColorInt
@@ -164,6 +175,10 @@ class TravelChart @JvmOverloads constructor(
         barHintPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_barHintPadding, resources.getDimensionPixelOffset(R.dimen.bar_hint_padding))
         barHintBackground = a.getDrawable(R.styleable.TravelChart_barHintBackground) ?: ContextCompat.getDrawable(context, R.drawable.bar_hint_background)
         barHintBackgroundPadding = a.getDimensionPixelOffset(R.styleable.TravelChart_barHintBackgroundPadding, resources.getDimensionPixelOffset(R.dimen.bar_hint_background_padding))
+        barHintBackgroundPaddingLeft = a.getDimensionPixelOffset(R.styleable.TravelChart_barHintBackgroundPaddingLeft, resources.getDimensionPixelOffset(R.dimen.bar_hint_background_padding))
+        barHintBackgroundPaddingTop = a.getDimensionPixelOffset(R.styleable.TravelChart_barHintBackgroundPaddingTop, resources.getDimensionPixelOffset(R.dimen.bar_hint_background_padding))
+        barHintBackgroundPaddingRight = a.getDimensionPixelOffset(R.styleable.TravelChart_barHintBackgroundPaddingRight, resources.getDimensionPixelOffset(R.dimen.bar_hint_background_padding))
+        barHintBackgroundPaddingBottom = a.getDimensionPixelOffset(R.styleable.TravelChart_barHintBackgroundPaddingBottom, resources.getDimensionPixelOffset(R.dimen.bar_hint_background_padding))
         barHintTextSize = a.getDimension(R.styleable.TravelChart_barHintTextSize, resources.getDimension(R.dimen.bar_hint_text_size))
         barHintTextColor = a.getColor(R.styleable.TravelChart_barHintTextColor, ContextCompat.getColor(context, R.color.bar_hint_text_color))
 
@@ -574,7 +589,7 @@ class TravelChart @JvmOverloads constructor(
 
             val currentLabelWidth = textBounds.width()
 
-            var currentBgWidth = barHintBackgroundPadding + currentLabelWidth + barHintBackgroundPadding
+            var currentBgWidth = barHintBackgroundPaddingLeft + currentLabelWidth + barHintBackgroundPaddingRight
             val currentBgHeight = barHintContentHeight
 
             //中间的背景的宽度不能小于高度（保持至少为圆）
@@ -633,7 +648,7 @@ class TravelChart @JvmOverloads constructor(
         xLabelPaint.getTextBounds(X_LABEL_DEFAULT, 0, X_LABEL_DEFAULT.length, textBounds)
         xAxisContentHeight = xAxisCurrentBackgroundPadding + (textBounds.bottom - textBounds.top) + xAxisCurrentBackgroundPadding
         xHintPaint.getTextBounds(X_LABEL_DEFAULT, 0, X_LABEL_DEFAULT.length, textBounds)
-        barHintContentHeight = barHintBackgroundPadding + (textBounds.bottom - textBounds.top) + barHintBackgroundPadding
+        barHintContentHeight = barHintBackgroundPaddingTop + (textBounds.bottom - textBounds.top) + barHintBackgroundPaddingBottom
     }
 
     override fun onOverScrolled(scrollX: Int, scrollY: Int, clampedX: Boolean, clampedY: Boolean) {
