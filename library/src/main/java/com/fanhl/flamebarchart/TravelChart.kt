@@ -580,7 +580,7 @@ class TravelChart @JvmOverloads constructor(
             } else {
                 1 - 2 * Math.abs(currentXAxisOffsetPercent)
             })
-            val velocityAlpha = 1f//minOf(maxOf(2 - Math.abs(scroller.currVelocity / 1000), 0f), 1f)
+            val velocityAlpha = minOf(maxOf(2 - Math.abs(scroller.currVelocity / 100), 0f), 1f)
 
             Log.d("TravelChart", "drawBarHint: scroller.currVelocity:${scroller.currVelocity} currentXAxis:$currentXAxis currentXAxisOffsetPercent:$currentXAxisOffsetPercent offsetAlpha:$offsetAlpha")
 
