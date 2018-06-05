@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.ViewConfiguration;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
+import android.widget.Scroller;
 
 /**
  * This class encapsulates scrolling with the ability to overshoot the bounds
