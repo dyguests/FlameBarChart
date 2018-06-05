@@ -3,6 +3,7 @@ package com.fanhl.flamebarchart.sample
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.fanhl.flamebarchart.TravelChart
+import com.fanhl.flamebarchart.sample.model.Item
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -19,18 +20,4 @@ class MainActivity : AppCompatActivity() {
         chart_travel.setXAxis(10)
     }
 
-    data class Item(val x: Int, val y: Float) : TravelChart.IItem {
-        override fun getXLabel(): String {
-            return if (Math.abs(x - 15) <= 0.01f) "Today" else "$x"
-        }
-
-        override fun getXHint(): String {
-            return "${(x * y * 100).toInt()}km"
-        }
-
-        override fun getYAxis(): Float {
-            return y
-        }
-
-    }
 }
