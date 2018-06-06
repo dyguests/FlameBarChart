@@ -1,10 +1,29 @@
 # FlameBarChart
 
+[![](https://jitpack.io/v/dyguests/FlameBarChart.svg)](https://jitpack.io/#dyguests/FlameBarChart)
+
 一个炫酷的柱状图表。
 
 ![](./graphics/multi_sample.gif)
 
 # Import
+
+###### Step 1. Add the JitPack repository to your build file
+
+Add it in your root build.gradle at the end of repositories:
+
+	allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+
+###### Step 2. Add the dependency
+
+	dependencies {
+	        implementation 'com.github.dyguests:FlameBarChart:0.3'
+	}
 
 # Usage
 
