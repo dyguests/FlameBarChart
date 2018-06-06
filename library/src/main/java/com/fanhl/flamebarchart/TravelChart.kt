@@ -21,6 +21,7 @@ import com.fanhl.util.ColorUtils
 import com.fanhl.util.CompatibleHelper
 import com.fanhl.widget.OverScroller
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 /**
@@ -65,6 +66,9 @@ class TravelChart @JvmOverloads constructor(
         }
         set(value) {
         }
+
+    /** 回调 */
+    private val onXAxisChangeListeners by lazy { ArrayList<OnXAxisChangeListener>() }
 
     // --------------------------------- 输入 ---------------------------
 
@@ -149,9 +153,26 @@ class TravelChart @JvmOverloads constructor(
 
     /** 当前居中的x轴值 */
     private var currentXAxis = 0
+        set(value) {
+            if (field == value) return
+
+            field = value
+
+            onXAxisChangeListeners.forEach {
+                it.onCurrentXAxisChanged(value)
+            }
+        }
     /** 当前居中偏移值 (-0.5,0.5] */
     private var currentXAxisOffsetPercent = 0f
+        set(value) {
+            if (field == value) return
 
+            field = value
+
+            onXAxisChangeListeners.forEach {
+                it.onCurrentXAxisOffsetChanged(currentXAxis, value)
+            }
+        }
     /**
      * Position of the last motion event.
      */
@@ -160,7 +181,11 @@ class TravelChart @JvmOverloads constructor(
     /** 存放xLabel等的尺寸 */
     private var textBounds = Rect()
 
-    /** 重置data的一个初始动画 */
+    /**
+     * 重置data的一个初始动画
+     *
+     * 现在没时间做
+     */
     private var resetAnimator: ValueAnimator? = null
 
     init {
@@ -920,6 +945,18 @@ class TravelChart @JvmOverloads constructor(
         changeCurrentXAxis(xAxis, animated)
     }
 
+    fun addOnXAxisChangeListeners(listener: OnXAxisChangeListener) {
+        onXAxisChangeListeners.add(listener)
+    }
+
+    fun removeOnXAxisChangeListeners(listener: OnXAxisChangeListener) {
+        onXAxisChangeListeners.remove(listener)
+    }
+
+    fun clearOnXAxisChangeListeners() {
+        onXAxisChangeListeners.clear()
+    }
+
     companion object {
         private const val TAG = "TravelChart"
 
@@ -1015,5 +1052,14 @@ class TravelChart @JvmOverloads constructor(
             Log.d("SnapSplineOverScroller", "getSplineFlingDistance: r0:${mScrollX.toDouble() / (barWidth + barInterval)} r1:${(destX - offset) / (barWidth + barInterval)}")
             return splineFlingDistance - offset
         }
+    }
+
+    /**
+     * 左右滑动时值变更时的监听
+     */
+    interface OnXAxisChangeListener {
+        fun onCurrentXAxisChanged(currentXAxis: Int)
+
+        fun onCurrentXAxisOffsetChanged(currentXAxis: Int, currentXAxisOffset: Float)
     }
 }
