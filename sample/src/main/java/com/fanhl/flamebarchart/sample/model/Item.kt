@@ -3,6 +3,7 @@ package com.fanhl.flamebarchart.sample.model
 import android.graphics.Color
 import com.fanhl.flamebarchart.TravelChart
 import com.fanhl.flamebarchart.sample.util.SpanUtils
+import com.fanhl.flamebarchart.sample.util.px
 
 data class Item(val x: Int, val y: Float) : TravelChart.IItem {
     override fun getXLabel(): CharSequence {
@@ -13,8 +14,9 @@ data class Item(val x: Int, val y: Float) : TravelChart.IItem {
 //        return "${(x * y * 100).toInt()}km"
         return SpanUtils()
                 .append("${(x * y * 100).toInt()}")
+                .append(" ")
 //                .append("km")
-                .append("km").setFontSize(28)
+                .append("km").setFontSize(11.px)
                 .create()
     }
 

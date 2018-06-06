@@ -237,7 +237,7 @@ class TravelChart @JvmOverloads constructor(
         xLabelPaint.textSize = xLabelTextSize
         xLabelPaint.color = xLabelTextColor
 
-        xHintPaint.textAlign = Paint.Align.CENTER
+//        xHintPaint.textAlign = Paint.Align.CENTER
         xHintPaint.textSize = barHintTextSize
         xHintPaint.color = barHintTextColor
 
@@ -750,6 +750,7 @@ class TravelChart @JvmOverloads constructor(
             xHintPaint.getTextBounds(currentXLabel.toString(), 0, currentXLabel.length, textBounds)
 
             val currentLabelWidth = textBounds.width()
+            val currentLabelHeight = textBounds.height()
 
             var currentBgWidth = barHintBackgroundPaddingLeft + currentLabelWidth + barHintBackgroundPaddingRight
             val currentBgHeight = barHintContentHeight
@@ -798,7 +799,7 @@ class TravelChart @JvmOverloads constructor(
             val layout = StaticLayout(currentXLabel, xHintPaint, canvas.width, Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false)
 
             val saveCount = canvas.save()
-            canvas.translate(x, yText - /*文字本身距底部的偏移*/(xHintPaint.descent() + xHintPaint.ascent()) / 2 - /*StaticLayout的偏移*/layout.height / 2 - /*text在StaticLayout中的偏移*/textBounds.height() / 2)
+            canvas.translate(x - currentLabelWidth / 2, yText - /*文字本身距底部的偏移*/(xHintPaint.descent() + xHintPaint.ascent()) / 2 - /*StaticLayout的偏移*/layout.height / 2 - /*text在StaticLayout中的偏移*/currentLabelHeight / 2)
 
             layout.draw(canvas)
 
