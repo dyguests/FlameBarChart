@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
 import android.support.annotation.Dimension
 import android.support.v4.content.ContextCompat
+import android.text.SpannableString
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.util.Log
@@ -677,12 +678,12 @@ class TravelChart @JvmOverloads constructor(
             //注：这里要加一个动态渐变
 
             val currentXLabel = get(currentIndex).getXLabel()
-            xLabelPaint.getTextBounds(currentXLabel, 0, currentXLabel.length, textBounds)
+            xLabelPaint.getTextBounds(currentXLabel.toString(), 0, currentXLabel.length, textBounds)
 
             val currentLabelWidth = textBounds.width()
             val previousLabelWidth = if (previousIndex >= 0) {
                 val previousXLabel = get(previousIndex).getXLabel()
-                xLabelPaint.getTextBounds(previousXLabel, 0, previousXLabel.length, textBounds)
+                xLabelPaint.getTextBounds(previousXLabel.toString(), 0, previousXLabel.length, textBounds)
                 textBounds.right - textBounds.left
             } else -1
 
@@ -720,7 +721,8 @@ class TravelChart @JvmOverloads constructor(
 
             xLabelPaint.color = xLabelColor
 
-            canvas.drawText(item.getXLabel(), textCenterX, textCenterY, xLabelPaint)
+            val xLabel = item.getXLabel()
+            canvas.drawText(xLabel, 0, xLabel.length, textCenterX, textCenterY, xLabelPaint)
         }
     }
 
@@ -742,7 +744,7 @@ class TravelChart @JvmOverloads constructor(
             val yText = (barHintBackgroundPaddingTop + (barHintContentHeight - barHintBackgroundPaddingTop - barHintBackgroundPaddingBottom) / 2) + (barsHeight * (1 - currentItem.getYAxis()))
 
             val currentXLabel = currentItem.getXHint()
-            xHintPaint.getTextBounds(currentXLabel, 0, currentXLabel.length, textBounds)
+            xHintPaint.getTextBounds(currentXLabel.toString(), 0, currentXLabel.length, textBounds)
 
             val currentLabelWidth = textBounds.width()
 
@@ -787,7 +789,7 @@ class TravelChart @JvmOverloads constructor(
                 draw(canvas)
             }
             xHintPaint.alpha = alpha
-            canvas.drawText(currentXLabel, x, yText - ((xHintPaint.descent() + xHintPaint.ascent()) / 2), xHintPaint)
+            canvas.drawText(currentXLabel, 0, currentXLabel.length, x, yText - ((xHintPaint.descent() + xHintPaint.ascent()) / 2), xHintPaint)
         }
     }
 
@@ -994,12 +996,12 @@ class TravelChart @JvmOverloads constructor(
         /**
          * 获取x轴Label的值
          */
-        fun getXLabel(): String
+        fun getXLabel(): CharSequence
 
         /**
          * 获取x轴对应项居中时顶部的提示文字
          */
-        fun getXHint(): String
+        fun getXHint(): CharSequence
 
         /**
          * 获取y轴坐标值
@@ -1016,11 +1018,11 @@ class TravelChart @JvmOverloads constructor(
     }
 
     private data class DefaultItem(val x: Int, val y: Float) : IItem {
-        override fun getXLabel(): String {
+        override fun getXLabel(): CharSequence {
             return if (Math.abs(x - 15) <= 0.01f) "Today" else "$x"
         }
 
-        override fun getXHint(): String {
+        override fun getXHint(): CharSequence {
             return "${(x * y * 100).toInt()}km"
         }
 

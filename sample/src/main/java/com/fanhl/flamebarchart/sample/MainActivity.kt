@@ -1,10 +1,8 @@
 package com.fanhl.flamebarchart.sample
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.View
-import android.widget.Toast
 import com.fanhl.flamebarchart.TravelChart
 import com.fanhl.flamebarchart.sample.model.Item
 import kotlinx.android.synthetic.main.activity_main.*
