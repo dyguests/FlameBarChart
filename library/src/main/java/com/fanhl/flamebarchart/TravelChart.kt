@@ -23,6 +23,9 @@ import com.fanhl.util.CompatibleHelper
 import com.fanhl.widget.OverScroller
 import java.util.*
 import kotlin.collections.ArrayList
+import android.opengl.ETC1.getWidth
+import android.text.Layout
+import android.text.StaticLayout
 
 
 /**
@@ -789,7 +792,17 @@ class TravelChart @JvmOverloads constructor(
                 draw(canvas)
             }
             xHintPaint.alpha = alpha
-            canvas.drawText(currentXLabel, 0, currentXLabel.length, x, yText - ((xHintPaint.descent() + xHintPaint.ascent()) / 2), xHintPaint)
+
+//            canvas.drawText(currentXLabel, 0, currentXLabel.length, x, yText - ((xHintPaint.descent() + xHintPaint.ascent()) / 2), xHintPaint)
+
+            val layout = StaticLayout(currentXLabel, xHintPaint, canvas.width, Layout.Alignment.ALIGN_NORMAL, 1f, 0f, false)
+
+            val saveCount = canvas.save()
+            canvas.translate(x, yText - /*文字本身距底部的偏移*/(xHintPaint.descent() + xHintPaint.ascent()) / 2 - /*StaticLayout的偏移*/layout.height / 2 - /*text在StaticLayout中的偏移*/textBounds.height() / 2)
+
+            layout.draw(canvas)
+
+            canvas.restoreToCount(saveCount)
         }
     }
 
