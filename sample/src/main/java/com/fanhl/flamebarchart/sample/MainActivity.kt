@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.ScrollView
+import android.widget.Toast
 import com.fanhl.flamebarchart.TravelChart
 import com.fanhl.flamebarchart.sample.model.Item
 import kotlinx.android.synthetic.main.activity_main.*
@@ -28,6 +29,10 @@ class MainActivity : AppCompatActivity() {
 
             override fun onCurrentXAxisOffsetChanged(currentXAxis: Int, currentXAxisOffset: Float, velocity: Float) {
                 Log.d(TAG, "onCurrentXAxisOffsetChanged: currentXAxis:$currentXAxis,currentXAxisOffset:$currentXAxisOffset,velocity:$velocity")
+            }
+
+            override fun oScrollEnd(currentXAxis: Int) {
+                Toast.makeText(this@MainActivity, "oScrollEnd$currentXAxis", Toast.LENGTH_SHORT).show()
             }
         })
     }

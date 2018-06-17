@@ -13,7 +13,6 @@ import android.text.Layout
 import android.text.StaticLayout
 import android.text.TextPaint
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
@@ -450,8 +449,12 @@ class TravelChart @JvmOverloads constructor(
 //                        mEdgeGlowRight.onRelease()
 //                    }
 
-                    if (scroller.isFinished && Math.abs(currentXAxisOffsetPercent) > 0f) {
-                        changeCurrentXAxis(currentXAxis)
+                    if (scroller.isFinished) {
+                        if (Math.abs(currentXAxisOffsetPercent) > 0f) {
+                            changeCurrentXAxis(currentXAxis)
+                        } else {
+                            notifyScrollEnd()
+                        }
                     }
                 }
                 //暂时防warning
@@ -472,8 +475,12 @@ class TravelChart @JvmOverloads constructor(
 //                        mEdgeGlowRight.onRelease()
 //                    }
 
-                    if (scroller.isFinished && Math.abs(currentXAxisOffsetPercent) > 0f) {
-                        changeCurrentXAxis(currentXAxis)
+                    if (scroller.isFinished) {
+                        if (Math.abs(currentXAxisOffsetPercent) > 0f) {
+                            changeCurrentXAxis(currentXAxis)
+                        } else {
+                            notifyScrollEnd()
+                        }
                     }
                 }
             }
@@ -545,6 +552,15 @@ class TravelChart @JvmOverloads constructor(
 
             //必须调用该方法，否则不一定能看到滚动效果
             CompatibleHelper.postInvalidateOnAnimation(this)
+        } else if (!mIsBeingDragged /*手指放开后才进这个分支*/) {
+            //手指放开后才进这个分支
+//            Log.d(TAG, "computeScroll: scroll finished")
+
+            if (Math.abs(currentXAxisOffsetPercent) > 0f) {
+                changeCurrentXAxis(currentXAxis)
+            } else {
+                notifyScrollEnd()
+            }
         }
         super.computeScroll()
     }
@@ -860,6 +876,13 @@ class TravelChart @JvmOverloads constructor(
     }
 
     /**
+     * 通知滚动结束了
+     */
+    private fun notifyScrollEnd() {
+        onXAxisChangeListeners.forEach { it.oScrollEnd(currentXAxis) }
+    }
+
+    /**
      * 根据centerX与centerXOffset计算出scrollX
      */
     private fun calculationScrollX(centerX: Int, centerXOffset: Float): Int {
@@ -1083,6 +1106,8 @@ class TravelChart @JvmOverloads constructor(
         fun onCurrentXAxisOffsetChanged(currentXAxis: Int, currentXAxisOffset: Float)
 
         fun onCurrentXAxisOffsetChanged(currentXAxis: Int, currentXAxisOffset: Float, velocity: Float)
+
+        fun oScrollEnd(currentXAxis: Int)
     }
 
     abstract class DefaultOnXAxisChangeListener : OnXAxisChangeListener {
@@ -1093,6 +1118,9 @@ class TravelChart @JvmOverloads constructor(
         }
 
         override fun onCurrentXAxisOffsetChanged(currentXAxis: Int, currentXAxisOffset: Float, velocity: Float) {
+        }
+
+        override fun oScrollEnd(currentXAxis: Int) {
         }
     }
 }
