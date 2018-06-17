@@ -62,6 +62,9 @@ Add it in your root build.gradle at the end of repositories:
 回调
 
     onXAxisChangeListeners
+        fun onCurrentXAxisChanged(currentXAxis: Int)
+        fun onCurrentXAxisOffsetChanged(currentXAxis: Int, currentXAxisOffset: Float, velocity: Float)
+        fun oScrollEnd(currentXAxis: Int)
 
 # License
 
