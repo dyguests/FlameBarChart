@@ -277,13 +277,13 @@ class TravelChart @JvmOverloads constructor(
 
                 //到边后交给交给父布局
                 if (oldX <= 0 && deltaX < 0) {
-                    Log.d(TAG, "dispatchTouchEvent: return false")
+//                    Log.d(TAG, "dispatchTouchEvent: return false")
 
                     needConsumeTouch = false
                     parent.requestDisallowInterceptTouchEvent(false)
                     return false
                 } else if (oldX >= getScrollRange() && deltaX > 0) {
-                    Log.d(TAG, "dispatchTouchEvent: return false")
+//                    Log.d(TAG, "dispatchTouchEvent: return false")
 
                     needConsumeTouch = false
                     parent.requestDisallowInterceptTouchEvent(false)
@@ -294,7 +294,7 @@ class TravelChart @JvmOverloads constructor(
 
         parent.requestDisallowInterceptTouchEvent(needConsumeTouch)
         val b = super.dispatchTouchEvent(ev)
-        Log.d(TAG, "dispatchTouchEvent: b:$b")
+//        Log.d(TAG, "dispatchTouchEvent: b:$b")
         return b
     }
 
@@ -341,11 +341,11 @@ class TravelChart @JvmOverloads constructor(
 
         val action = ev?.action ?: return false
 
-        Log.d(TAG, "onTouchEvent: action:$action")
+//        Log.d(TAG, "onTouchEvent: action:$action")
 
         when (action and MotionEvent.ACTION_MASK) {
             MotionEvent.ACTION_DOWN -> {
-                Log.d(TAG, "onTouchEvent: ACTION_DOWN")
+//                Log.d(TAG, "onTouchEvent: ACTION_DOWN")
                 //只有一个元素也没办法滚动
                 if (getChildCount() <= 1) {
                     return false
@@ -363,7 +363,7 @@ class TravelChart @JvmOverloads constructor(
                 mLastMotionX = ev.x.toInt()
             }
             MotionEvent.ACTION_MOVE -> {
-                Log.d(TAG, "onTouchEvent: ACTION_MOVE")
+//                Log.d(TAG, "onTouchEvent: ACTION_MOVE")
                 val x = ev.x.toInt()
                 var deltaX = mLastMotionX - x
                 if (!mIsBeingDragged && Math.abs(deltaX) > mTouchSlop) {
@@ -426,7 +426,7 @@ class TravelChart @JvmOverloads constructor(
                 }
             }
             MotionEvent.ACTION_UP -> {
-                Log.d(TAG, "onTouchEvent: ACTION_UP")
+//                Log.d(TAG, "onTouchEvent: ACTION_UP")
                 if (mIsBeingDragged) {
                     velocityTracker.computeCurrentVelocity(1000, mMaximumVelocity.toFloat())
                     val initialVelocity = velocityTracker.xVelocity.toInt()
@@ -458,7 +458,7 @@ class TravelChart @JvmOverloads constructor(
                 performClick()
             }
             MotionEvent.ACTION_CANCEL -> {
-                Log.d(TAG, "onTouchEvent: ACTION_CANCEL")
+//                Log.d(TAG, "onTouchEvent: ACTION_CANCEL")
                 if (mIsBeingDragged && getChildCount() > 1) {
                     if (scroller.springBack(mScrollX, mScrollY, 0, getScrollRange(), 0, 0)) {
                         CompatibleHelper.postInvalidateOnAnimation(this)
@@ -478,7 +478,7 @@ class TravelChart @JvmOverloads constructor(
                 }
             }
         }
-        Log.d(TAG, "onTouchEvent: return true")
+//        Log.d(TAG, "onTouchEvent: return true")
         return true
     }
 
