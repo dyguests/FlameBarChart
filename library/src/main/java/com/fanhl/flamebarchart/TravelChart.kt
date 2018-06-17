@@ -491,7 +491,7 @@ class TravelChart @JvmOverloads constructor(
      * which means we want to scroll towards the left.
      */
     private fun fling(velocityX: Int) {
-        if (getChildCount() > 0) {
+        if (getChildCount() > 1) {
             val width = width - paddingRight - paddingLeft
 //            val right = getScrollRange()
 
@@ -536,7 +536,7 @@ class TravelChart @JvmOverloads constructor(
 
     override fun computeScroll() {
         //先判断mScroller滚动是否完成
-        if (scroller.computeScrollOffset()) {
+         if (scroller.computeScrollOffset()) {
 
             //这里调用View的scrollTo()完成实际的滚动
 //            scrollTo(scroller.currX, scroller.currY)
