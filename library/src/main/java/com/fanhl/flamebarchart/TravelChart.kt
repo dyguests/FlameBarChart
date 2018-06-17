@@ -1050,23 +1050,23 @@ class TravelChart @JvmOverloads constructor(
      * 这里划到结束要直接滑动到对应xAxis,没有currentXAxisOffsetPercent
      */
     inner class SnapSplineOverScroller(context: Context) : OverScroller.SplineOverScroller(context) {
-        override fun getSplineFlingDistance(velocity: Int): Double {
-            val splineFlingDistance = super.getSplineFlingDistance(velocity)
-            val destX = mScrollX + splineFlingDistance * Math.signum(velocity.toFloat())
-
-            val remainder = destX % (barWidth + barInterval)
-
-            val offset = if (remainder > (barWidth + barInterval) / 2) {
-                remainder - barWidth + barInterval
-            } else {
-                remainder
-            }
-
-            // FIXME: 2018/6/5 fanhl 这里滑动还是对不准
-
-            Log.d("SnapSplineOverScroller", "getSplineFlingDistance: r0:${mScrollX.toDouble() / (barWidth + barInterval)} r1:${(destX - offset) / (barWidth + barInterval)}")
-            return splineFlingDistance - offset
-        }
+//        override fun getSplineFlingDistance(velocity: Int): Double {
+//            val splineFlingDistance = super.getSplineFlingDistance(velocity)
+//            val destX = mScrollX + splineFlingDistance * Math.signum(velocity.toFloat())
+//
+//            val remainder = destX % (barWidth + barInterval)
+//
+//            val offset = if (remainder > (barWidth + barInterval) / 2) {
+//                remainder - barWidth + barInterval
+//            } else {
+//                remainder
+//            }
+//
+//            // FIXME: 2018/6/5 fanhl 这里滑动还是对不准
+//
+//            Log.d("SnapSplineOverScroller", "getSplineFlingDistance: r0:${mScrollX.toDouble() / (barWidth + barInterval)} r1:${(destX - offset) / (barWidth + barInterval)}")
+//            return splineFlingDistance - offset
+//        }
     }
 
     /**
