@@ -20,13 +20,13 @@ class MainActivity : AppCompatActivity() {
         }
         chart_travel.setXAxis(10)
 
-        chart_travel.addOnXAxisChangeListeners(object : TravelChart.OnXAxisChangeListener {
+        chart_travel.addOnXAxisChangeListeners(object : TravelChart.DefaultOnXAxisChangeListener() {
             override fun onCurrentXAxisChanged(currentXAxis: Int) {
                 Log.d(TAG, "onCurrentXAxisChanged: currentXAxis:$currentXAxis")
             }
 
-            override fun onCurrentXAxisOffsetChanged(currentXAxis: Int, currentXAxisOffset: Float) {
-                Log.d(TAG, "onCurrentXAxisOffsetChanged: currentXAxis:$currentXAxis,currentXAxisOffset:$currentXAxisOffset")
+            override fun onCurrentXAxisOffsetChanged(currentXAxis: Int, currentXAxisOffset: Float, velocity: Float) {
+                Log.d(TAG, "onCurrentXAxisOffsetChanged: currentXAxis:$currentXAxis,currentXAxisOffset:$currentXAxisOffset,velocity:$velocity")
             }
         })
     }

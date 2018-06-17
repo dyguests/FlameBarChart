@@ -9,7 +9,8 @@ import android.graphics.drawable.Drawable
 import android.support.annotation.ColorInt
 import android.support.annotation.Dimension
 import android.support.v4.content.ContextCompat
-import android.text.SpannableString
+import android.text.Layout
+import android.text.StaticLayout
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.util.Log
@@ -23,9 +24,6 @@ import com.fanhl.util.CompatibleHelper
 import com.fanhl.widget.OverScroller
 import java.util.*
 import kotlin.collections.ArrayList
-import android.opengl.ETC1.getWidth
-import android.text.Layout
-import android.text.StaticLayout
 
 
 /**
@@ -175,6 +173,7 @@ class TravelChart @JvmOverloads constructor(
 
             onXAxisChangeListeners.forEach {
                 it.onCurrentXAxisOffsetChanged(currentXAxis, value)
+                it.onCurrentXAxisOffsetChanged(currentXAxis, value, scroller.currVelocity)
             }
         }
     /**
@@ -536,7 +535,7 @@ class TravelChart @JvmOverloads constructor(
 
     override fun computeScroll() {
         //先判断mScroller滚动是否完成
-         if (scroller.computeScrollOffset()) {
+        if (scroller.computeScrollOffset()) {
 
             //这里调用View的scrollTo()完成实际的滚动
 //            scrollTo(scroller.currX, scroller.currY)
@@ -1074,8 +1073,26 @@ class TravelChart @JvmOverloads constructor(
      * 左右滑动时值变更时的监听
      */
     interface OnXAxisChangeListener {
+        /** 仅当currentXAxis变更时回调 */
         fun onCurrentXAxisChanged(currentXAxis: Int)
 
+        /**
+         * see [com.fanhl.flamebarchart.TravelChart.OnXAxisChangeListener.onCurrentXAxisOffsetChanged(int, float, float)]
+         */
+        @Deprecated("废弃")
         fun onCurrentXAxisOffsetChanged(currentXAxis: Int, currentXAxisOffset: Float)
+
+        fun onCurrentXAxisOffsetChanged(currentXAxis: Int, currentXAxisOffset: Float, velocity: Float)
+    }
+
+    abstract class DefaultOnXAxisChangeListener : OnXAxisChangeListener {
+        override fun onCurrentXAxisChanged(currentXAxis: Int) {
+        }
+
+        override fun onCurrentXAxisOffsetChanged(currentXAxis: Int, currentXAxisOffset: Float) {
+        }
+
+        override fun onCurrentXAxisOffsetChanged(currentXAxis: Int, currentXAxisOffset: Float, velocity: Float) {
+        }
     }
 }
