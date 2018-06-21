@@ -140,7 +140,7 @@ class TravelChart @JvmOverloads constructor(
     var data: DefaultData<*>? = null
         set(value) {
             field = value
-            invalidate()
+            postInvalidate()
         }
 
     // --------------------------------- 运算 ---------------------------------
