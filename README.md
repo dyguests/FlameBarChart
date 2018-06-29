@@ -66,6 +66,29 @@ Add it in your root build.gradle at the end of repositories:
         fun onCurrentXAxisOffsetChanged(currentXAxis: Int, currentXAxisOffset: Float, velocity: Float)
         fun oScrollEnd(currentXAxis: Int)
 
+数据结构
+
+        interface IItem {
+            /**
+             * 获取x轴Label的值
+             */
+            fun getXLabel(): CharSequence
+
+            /**
+             * 获取x轴对应项居中时顶部的提示文字
+             */
+            fun getXHint(): CharSequence
+
+            /**
+             * 获取y轴坐标值
+             *
+             * 无坐标时 不显示popup框，柱高度当0处理
+             */
+            fun getYAxis(): Float?
+        }
+
+注意：getYAxis 返回null时，不显示数据气泡
+
 # License
 
 Copyright 2018 fanhl
