@@ -651,7 +651,7 @@ class TravelChart @JvmOverloads constructor(
                 val barCenterX = horizontalMidpoint + ((index - currentXAxis - currentXAxisOffsetPercent) * (barWidth + barInterval)).toInt()
                 setBounds(
                         barCenterX - barWidthHalf,
-                        (barsHeight * (1 - item.getYAxis())).toInt(),
+                        (barsHeight * (1 - (item.getYAxis() ?: 0f))).toInt(),
                         barCenterX + barWidthHalf,
                         barsHeight
                 )
@@ -756,10 +756,16 @@ class TravelChart @JvmOverloads constructor(
             //当前要显示在居中背景中的元素的索引
             val currentIndex = minOf(maxOf(0, currentXAxis), size - 1)
             val currentItem = get(currentIndex)
+
+            //为y=null时不绘制当前pop hint
+            if (currentItem.getYAxis() == null) {
+                return@apply
+            }
+
             val x = horizontalMidpoint + (currentIndex - currentXAxis - currentXAxisOffsetPercent) * (barWidth + barInterval)
 
-            val y = verticalMidpoint + (barsHeight * (1 - currentItem.getYAxis()))
-            val yText = (barHintBackgroundPaddingTop + (barHintContentHeight - barHintBackgroundPaddingTop - barHintBackgroundPaddingBottom) / 2) + (barsHeight * (1 - currentItem.getYAxis()))
+            val y = verticalMidpoint + (barsHeight * (1 - (currentItem.getYAxis() ?: 0f)))
+            val yText = (barHintBackgroundPaddingTop + (barHintContentHeight - barHintBackgroundPaddingTop - barHintBackgroundPaddingBottom) / 2) + (barsHeight * (1 - (currentItem.getYAxis() ?: 0f)))
 
             val currentXLabel = currentItem.getXHint()
             xHintPaint.getTextBounds(currentXLabel.toString(), 0, currentXLabel.length, textBounds)
@@ -979,6 +985,11 @@ class TravelChart @JvmOverloads constructor(
         setXAxis(xAxis, true)
     }
 
+    /**
+     * 反回当前x坐标
+     */
+    fun getXAxis() = currentXAxis
+
     fun setXAxis(xAxis: Int, animated: Boolean) {
         changeCurrentXAxis(xAxis, animated)
     }
@@ -1041,8 +1052,10 @@ class TravelChart @JvmOverloads constructor(
 
         /**
          * 获取y轴坐标值
+         *
+         * 无坐标时 不显示popup框，柱高度当0处理
          */
-        fun getYAxis(): Float
+        fun getYAxis(): Float?
     }
 
     /**
