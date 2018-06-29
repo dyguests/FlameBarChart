@@ -1075,7 +1075,7 @@ class TravelChart @JvmOverloads constructor(
             return "${(x * y * 100).toInt()}km"
         }
 
-        override fun getYAxis(): Float {
+        override fun getYAxis(): Float? {
             return y
         }
     }

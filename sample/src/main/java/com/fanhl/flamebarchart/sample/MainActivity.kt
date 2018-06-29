@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     private fun rebindData() {
         val random = Random()
         chart_travel.data = TravelChart.DefaultData<Item>().apply {
-            (1..20).forEach { list.add(Item(it, random.nextFloat())) }
+            (1..20).forEach { list.add(Item(it, random.nextFloat().takeIf { it > 0.2f })) }
         }
     }
 
