@@ -574,8 +574,6 @@ class TravelChart @JvmOverloads constructor(
         val validWidth = width - paddingLeft - paddingRight
         val validHeight = height - paddingTop - paddingBottom
 
-        maxVisibleCount = (validWidth + barInterval) / (barWidth + barInterval)
-
         val saveCount = canvas.save()
         canvas.translate(paddingLeft.toFloat(), paddingRight.toFloat())
 
@@ -840,6 +838,9 @@ class TravelChart @JvmOverloads constructor(
 
         // Calling this with the present values causes it to re-claim them
         scrollTo(mScrollX, 0)
+
+        val validWidth = width - paddingLeft - paddingRight
+        maxVisibleCount = (validWidth + barInterval) / (barWidth + barInterval)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
