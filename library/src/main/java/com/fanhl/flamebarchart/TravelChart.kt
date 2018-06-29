@@ -190,6 +190,10 @@ class TravelChart @JvmOverloads constructor(
      */
     private var resetAnimator: ValueAnimator? = null
 
+    /** 在屏幕中最多可以同时显示多少条柱 */
+    var maxVisibleCount: Int = -1
+        private set
+
     init {
         val configuration = ViewConfiguration.get(context)
         mTouchSlop = configuration.scaledTouchSlop
@@ -569,6 +573,8 @@ class TravelChart @JvmOverloads constructor(
         super.onDraw(canvas)
         val validWidth = width - paddingLeft - paddingRight
         val validHeight = height - paddingTop - paddingBottom
+
+        maxVisibleCount = (validWidth + barInterval) / (barWidth + barInterval)
 
         val saveCount = canvas.save()
         canvas.translate(paddingLeft.toFloat(), paddingRight.toFloat())
