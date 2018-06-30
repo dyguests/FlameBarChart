@@ -665,7 +665,20 @@ class TravelChart @JvmOverloads constructor(
     }
 
     private fun drawBarIndicator(canvas: Canvas, barsWidth: Int, barsHeight: Int) {
+        //绘制水平居中提示
+        data?.list?.takeIf { it.isNotEmpty() }?.apply {
+            //当前要显示在居中背景中的元素的索引
+            val currentIndex = minOf(maxOf(0, currentXAxis), size - 1)
+            val currentItem = get(currentIndex)
+
+            //为y=null时不绘制当前pop hint
+            if (currentItem.getYAxis() == null) {
+                return
+            }
+        }
+
         val horizontalMidpoint = barsWidth / 2
+
 
         //绘制水平居中的中线
         barIndicatorDrawable?.apply {

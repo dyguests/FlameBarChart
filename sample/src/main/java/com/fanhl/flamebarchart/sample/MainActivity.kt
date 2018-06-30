@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     private fun rebindData() {
         val random = Random()
         chart_travel.data = TravelChart.DefaultData<Item>().apply {
-            (1..20).forEach { list.add(Item(it, random.nextFloat().takeIf { it > 0.2f })) }
+            (1..20).forEach { list.add(Item(it, random.nextFloat().takeIf { it > 0.3f })) }
         }
         tv_max_visible_count.text = "在屏幕中最多可以同时显示多少条柱：\n${chart_travel.maxVisibleCount}"
     }
