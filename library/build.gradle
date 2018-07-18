@@ -23,6 +23,31 @@ android {
 
 }
 
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+
+task androidJavadocs(type: Javadoc) {
+    failOnError false
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    classifier = 'javadoc'
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+artifacts {
+    archives androidSourcesJar
+    archives androidJavadocsJar
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
